@@ -1,0 +1,5 @@
+*.pyc
+input/posts/*
+output/
+build/
+

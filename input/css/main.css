@@ -1,0 +1,50 @@
+html {
+    background-color: #F5F5F5;
+    color: #444;
+    line-height: 1.4em;
+}
+
+ul {
+    margin: 0;
+    padding: 0 0 0 1em;
+}
+
+ul li {
+    list-style-type: disc;
+}
+
+ol {
+    margin: 0;
+    padding: 0 0 0 1.4em;
+}
+
+li {
+    margin: 0;
+    padding: 0;
+}
+
+hr {
+    margin: 2em auto;
+    width: 66%;
+}
+
+.maincol {
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+#header a:link, #header a:hover, #header a:focus, #header a:visited {
+    color: #222;
+    text-decoration: none;
+}
+
+#body {
+    font-size: 17px;
+}
+
+#metadata {
+    border-top: 1px solid #CCC;
+    font-size: 85%;
+    margin-top: 1.5em;
+    padding-top: 1.5em;
+}
