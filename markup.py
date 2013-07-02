@@ -74,7 +74,7 @@ def parse_list_chunk(chunk):
         sline = line.strip()
         if sline.startswith('- '):
             list_type = 'ul'
-        elif re.match(r'^[\d]\. ', sline):
+        elif re.match(r'^[\d]\. ', sline):  # match digit, dot, space
             list_type = 'ol'
         else:
             list_type = None
@@ -98,7 +98,7 @@ def parse_list_chunk(chunk):
 
 def parsed_list_to_html(parsed_list, last_indent=0):
     """ Recursively convert a list to HTML """
-    print '\n', parsed_list
+
     if parsed_list[0][0] == 'ul':
         open_elem, close_elem = '<ul>', '</ul>'
     else:
@@ -200,7 +200,6 @@ def typed_chunk_to_html(typed_chunk):
     if chunk_type == 'pre':
         # no inline markup, but do html escape
         chunk = map(cgi.escape, chunk)
-        print '\n\n\n', chunk, '\n\n\n'
 
     if chunk_type == 'p':
         chunk = map(inline_markup_to_html, chunk)

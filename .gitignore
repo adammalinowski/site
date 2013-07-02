@@ -2,4 +2,4 @@
 input/posts/*
 output/
 build/
-
+*.sublime-workspace

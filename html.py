@@ -46,8 +46,15 @@ def file_thing(html_input_dir, html_output_dir, css_filename, filename):
     str_to_file(html_output_dir + html_file_name, post_html)
 
 
-""" Take post text, return raw post and raw metadata """
-split_post_metadata = partial(re.split, r'~{3,}')
+def split_post_metadata(raw_post):
+    """ Take post text, return raw post and raw metadata """
+    result = re.split(r'~{3,}', raw_post)
+    result_len = len(result)
+    assert result_len < 3, 'Invalid markup'
+    if len(result) == 1:
+        return (result[0], '')
+    elif len(result) == 2:
+        return result
 
 
 @log
