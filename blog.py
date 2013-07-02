@@ -6,10 +6,11 @@ from miscutils import get_cachebusting_name
 from funcutils import str_to_file
 
 
-ROOT = os.path.dirname(os.path.realpath(__file__))
-CSS_INPUT_DIR = ROOT + 'css/'
-OUTPUT_DIR = '~/posts/output/'
-POST_INPUT_DIR = '~/posts/'
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+HOME = os.path.expanduser("~")
+POST_INPUT_DIR = HOME + '/posts/publish/'
+OUTPUT_DIR = HOME + '/posts/output/'
+CSS_INPUT_DIR = PROJECT_ROOT + '/css/'
 
 
 def main():

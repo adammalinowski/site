@@ -4,37 +4,26 @@ html {
     line-height: 1.4em;
 }
 
-ul {
-    margin: 0;
-    padding: 0 0 0 1em;
-}
+ul { margin: 0; padding: 0 0 0 1em; }
+ul li { list-style-type: disc; }
+ol { margin: 0; padding: 0 0 0 1.4em; }
+li { margin: 0; padding: 0; }
+hr { margin: 2em auto; width: 66%; }
 
-ul li {
-    list-style-type: disc;
-}
-
-ol {
-    margin: 0;
-    padding: 0 0 0 1.4em;
-}
-
-li {
-    margin: 0;
-    padding: 0;
-}
-
-hr {
-    margin: 2em auto;
-    width: 66%;
-}
+h1 { font-size: 1.55em; }
+h2 { font-size: 1.22em; }
+h3 { font-size: 1.07em; }
 
 .maincol {
     margin: 0 auto;
     max-width: 700px;
 }
 
+#header {
+    text-align: center;
+}
 #header a:link, #header a:hover, #header a:focus, #header a:visited {
-    color: #222;
+    color: #333;
     text-decoration: none;
 }
 
@@ -44,7 +33,11 @@ hr {
 
 #metadata {
     border-top: 1px solid #CCC;
-    font-size: 85%;
+    font-size: .85em;
     margin-top: 1.5em;
     padding-top: 1.5em;
+}
+
+#footer {
+    font-size: .8em;
 }

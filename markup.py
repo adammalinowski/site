@@ -220,8 +220,6 @@ def typed_chunk_to_html(typed_chunk):
 
     chunk_type, chunk = typed_chunk
 
-
-
     if chunk_type == 'hr':
         return '<hr>'
 

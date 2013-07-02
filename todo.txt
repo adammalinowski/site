@@ -1,0 +1,3 @@
+- internal anchors for paragraphs/subtitles
+- inline tags
+- commas after links
