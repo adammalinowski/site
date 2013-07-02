@@ -10,6 +10,32 @@ log = logger(1)
 
 
 @log
+def xotd(xotd_post):
+    """ Takes a thing-of-the-day
+
+    Takes thing-of-the-day file and converts it to html files
+
+    Format is:
+
+        [Title]
+
+        ---
+
+        [Entry]
+
+        [Date]
+
+        ---
+
+    """
+    chunks = otd_post.split('---')
+    # remove empty lines at beginning and end of each chunk
+
+    title, posts = chunks[0], chunks[1:]
+
+
+# refactor/rewrite
+@log
 def post_to_chunks(post):
     """ Split a post into lists of lines, broken by empty lines
 
@@ -164,6 +190,9 @@ def wrap_match(match):
             re.VERBOSE)
 
 
+# todo |inline tags|
+# todo |inline tags|,, having a comma at the end of a bit of markup
+# or some other way to have commas after link damnit
 def inline_markup_to_html(astr):
     """ Convert inline markup to html e.g. *bold text* -> <b>bold text</b> """
 
@@ -190,6 +219,8 @@ def typed_chunk_to_html(typed_chunk):
     """ Convert a typed chunk to html """
 
     chunk_type, chunk = typed_chunk
+
+
 
     if chunk_type == 'hr':
         return '<hr>'

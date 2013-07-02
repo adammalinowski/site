@@ -22,6 +22,7 @@ todo:
 """
 
 
+# todo: xotd
 @log
 def do_html(html_input_dir, html_output_dir, css_filename):
     for filename in post_filenames(html_input_dir):
@@ -48,6 +49,7 @@ def file_thing(html_input_dir, html_output_dir, css_filename, filename):
 
 def split_post_metadata(raw_post):
     """ Take post text, return raw post and raw metadata """
+
     result = re.split(r'~{3,}', raw_post)
     result_len = len(result)
     assert result_len < 3, 'Invalid markup'
