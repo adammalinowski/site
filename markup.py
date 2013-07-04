@@ -193,6 +193,7 @@ def wrap_match(match):
 # todo |inline tags|
 # todo |inline tags|,, having a comma at the end of a bit of markup
 # or some other way to have commas after link damnit
+# and even like an apostrophe after a link. hmmmmm
 def inline_markup_to_html(astr):
     """ Convert inline markup to html e.g. *bold text* -> <b>bold text</b> """
 
@@ -214,17 +215,29 @@ def inline_markup_to_html(astr):
     return pipe(astr, [convert_markup_links, convert_raw_links])
 
 
+def chunk_type_wrap(chunk_type, chunk):
+    """ Wrap a chunk in HTML tags of it's chunk type """
+    return '<%s>%s</%s>' % (chunk_type, '<br>'.join(chunk), chunk_type)
+
+
 @log
 def typed_chunk_to_html(typed_chunk):
     """ Convert a typed chunk to html """
 
     chunk_type, chunk = typed_chunk
+    wrap = partial(chunk_type_wrap, chunk_type)  # little helper
 
     if chunk_type == 'hr':
         return '<hr>'
 
     if chunk_type == 'l':
         return pipe(chunk, [parse_list_chunk, parsed_list_to_html, '\n'.join])
+
+    if chunk_type in ['h2', 'h3']:
+        # todo assert lenght = 1
+        name = ''.join(chunk).replace(' ', '').lower()
+        chunk[0] = '<a href="#{0}">{1}</a>'.format(name, chunk[0])
+        return '<a name="{0}"></a>{1}'.format(name, wrap(chunk))
 
     if chunk_type == 'pre':
         # no inline markup, but do html escape
@@ -233,7 +246,7 @@ def typed_chunk_to_html(typed_chunk):
     if chunk_type == 'p':
         chunk = map(inline_markup_to_html, chunk)
 
-    return '<%s>%s</%s>' % (chunk_type, '\n'.join(chunk), chunk_type)
+    return wrap(chunk)
 
 
 """ Convert post in custom markup to html """

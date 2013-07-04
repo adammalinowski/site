@@ -1,3 +1,20 @@
+Todo
+
+
+general:
+- dark style
+- fix links so they work both locally and as html site
+- warnings:
+    - trailing char after link e.g. http:example.com,
+- homepage
+- handling for un-publishing?
+- tags
+- description field
 - internal anchors for paragraphs/subtitles
+
+markup:
+- fix lists
+- quotes (inner & block)
+- optional line breaking?
 - inline tags
-- commas after links
+- commas (& other) after links

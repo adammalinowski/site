@@ -8,20 +8,6 @@ from miscutils import logger
 log = logger(0)
 
 
-"""
-todo:
-- markup
-    - lists
-    - quotes (inner & block)
-    - optional line breaking
-- general
-    - warnings:
-        - trailing char after link e.g. http:example.com,
-    - homepage
-    - handling for un-publishing?
-"""
-
-
 # todo: xotd
 @log
 def do_html(html_input_dir, html_output_dir, css_filename):
@@ -43,7 +29,8 @@ def file_thing(html_input_dir, html_output_dir, css_filename, filename):
     html_file_name = filename[:-4]  # remove mandatory .txt
     body_html = markup.to_html(raw_body)
     metadata_html = metadata.to_html(raw_metadata)
-    post_html = make_html_page(body_html, metadata_html, css_filename, title)
+    template = '/projects/site/templates/base.html'
+    post_html = make_html_page(template, body_html, metadata_html, css_filename, title)
     str_to_file(html_output_dir + html_file_name, post_html)
 
 
@@ -61,10 +48,10 @@ def split_post_metadata(raw_post):
 
 
 @log
-def make_html_page(body_html, metadata_html, css_filename, title):
+def make_html_page(template, body_html, metadata_html, css_filename, title):
     """ Create HTML file """
 
-    return pipe('/projects/stat/templates/base.html',
+    return pipe(template,
                 [file_to_str,
                  atr('split', '\n'),
                  fmap(atr('strip')),
