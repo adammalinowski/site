@@ -10,9 +10,9 @@ log = logger(0)
 
 # todo: xotd
 @log
-def do_html(html_input_dir, html_output_dir, css_filename):
+def do_html(html_input_dir, html_output_dir, css_filename, js_filename):
     for filename in post_filenames(html_input_dir):
-        file_thing(html_input_dir, html_output_dir, css_filename, filename)
+        file_thing(html_input_dir, html_output_dir, css_filename, js_filename, filename)
 
 
 """ Get filename of posts for conversion """
@@ -23,14 +23,14 @@ post_filenames = lcompose([
 
 
 @log
-def file_thing(html_input_dir, html_output_dir, css_filename, filename):
+def file_thing(html_input_dir, html_output_dir, css_filename, js_filename, filename):
     post_str = file_to_str(html_input_dir + filename)
     title, raw_body, raw_metadata = split_post_metadata(post_str)
     html_file_name = filename[:-4]  # remove mandatory .txt
     body_html = markup.to_html(raw_body)
     metadata_html = metadata.to_html(raw_metadata)
     template = '/projects/site/templates/base.html'
-    post_html = make_html_page(template, body_html, metadata_html, css_filename, title)
+    post_html = make_html_page(template, body_html, metadata_html, css_filename, js_filename, title)
     str_to_file(html_output_dir + html_file_name, post_html)
 
 
@@ -48,7 +48,7 @@ def split_post_metadata(raw_post):
 
 
 @log
-def make_html_page(template, body_html, metadata_html, css_filename, title):
+def make_html_page(template, body_html, metadata_html, css_filename, js_filename, title):
     """ Create HTML file """
 
     return pipe(template,
@@ -62,5 +62,6 @@ def make_html_page(template, body_html, metadata_html, css_filename, title):
                         'page_title': title,
                         'body': body_html,
                         'metadata': metadata_html,
+                        'javascript': js_filename,
                         })
                  ])

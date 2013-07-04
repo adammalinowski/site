@@ -35,6 +35,11 @@ p, pre { margin: .8em 0; }
     padding-top: 1em;
 }
 
+#day, #night {
+    float: right;
+    display: none;
+}
+
 #metadata {
     border-top: 1px solid #CCC;
     font-size: .85em;
