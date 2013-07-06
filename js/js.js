@@ -18,19 +18,20 @@
     var show = function(elem) { elem.style.display = 'inline'; }
     var hide = function(elem) { elem.style.display = 'none'; }
 
+    var dayNightContainer = document.getElementById("dayNight");
     var dayOn = document.getElementById("dayOn");;
     var nightOn = document.getElementById("nightOn");
     var dayOff = document.getElementById("dayOff");
     var nightOff = document.getElementById("nightOff");
+    var darkFilename = dayNightContainer.getAttribute('data-darkname');
 
     var night = function(e) {
         var ss = document.createElement("link");
         ss.type = "text/css";
         ss.rel = "stylesheet";
-        ss.href = "dark.css";
+        ss.href = darkFilename;
         ss.id = "darkstyle";
         document.getElementsByTagName("head")[0].appendChild(ss);
-        //document.write('<link rel="stylesheet" type="text/css" href="dark.css" id="darkstyle">');
         show(nightOn);
         show(showDay);
         hide(dayOn);
@@ -51,7 +52,7 @@
     };
 
     if (localStorageAvailable()) {
-        show(document.getElementById("dayNight"));
+        show(dayNightContainer);
         var state = localStorage.getItem('dayOrNight');
         if (state === null || (state != 'day' && state != 'night')) {
             state = 'day';

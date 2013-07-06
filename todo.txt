@@ -7,10 +7,11 @@ general:
 - warnings:
     - trailing char after link e.g. http:example.com,
 - homepage
-- handling for un-publishing?
+- handling for un-publishing? also version/overwrite/removal handling
 - tags
 - description field
 - internal anchors for paragraphs/subtitles
+- xotd
 
 markup:
 - fix lists

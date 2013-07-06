@@ -5,11 +5,11 @@
     <title>{site_name} | {page_title}</title>
     <meta name="description" content="">
     <link rel="stylesheet" href="{css_filename}">
-    <link rel="stylesheet" href="{css_filename}">
     <!-- see /html -->
 </head>
 <body>
-    <div id="dayNight" style="display: none; float: right; margin: 1em;">
+    <div id="dayNight" data-darkname="{dark_css_filename}"
+         style="display: none; float: right; margin: 1em;">
         <b id="dayOn">day</b><a href="#" id="showDay">day</a>
         <b id="nightOn">night</b><a href="#" id="showNight">night</a>
     </div>
@@ -21,7 +21,7 @@
         {metadata}
     </div>
     <div id="footer" class="maincol">
-        <a href="/disclaimer">disclaimer</a>
+        <a href="disclaimer">disclaimer</a>
     </div>
     <script src="{javascript}"></script>
 </body>

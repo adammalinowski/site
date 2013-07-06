@@ -23,16 +23,11 @@ def get_path_files_with_ext(extension, path):
 combine = '\n'.join
 
 
-""" Minify a css string """
-minify_css = cssmin.cssmin
-
-
 """ Combine & minify all .css files in supplied dir """
-combine_minify_css = lcompose([
+combine_css = lcompose([
     partial(get_path_files_with_ext, '.css'),
     fmap(file_to_str),
     combine,
-    minify_css,
     ])
 
 
