@@ -18,7 +18,7 @@ def postfile_to_html(post_filename, static_filenames):
     metadata_html = metadata.to_html(raw_metadata)
     template = '/projects/site/templates/base.html'
     post_html = make_html_page(template, body_html, metadata_html, static_filenames, title)
-    return html_file_name, post_html
+    return html_file_name, post_html, title
 
 
 def split_post_metadata(raw_post):

@@ -1,8 +1,7 @@
 # todo: rename?
 import os
 
-import assets
-import html
+import assets, html, markup
 
 from miscutils import get_cachebusting_name
 from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr
@@ -34,9 +33,21 @@ def main():
         'js': js_filename
     }
 
+
+    files_with_titles = []
     for filename in post_filenames(POST_INPUT_DIR):
-        html_file_name, post_html = html.postfile_to_html(POST_INPUT_DIR + filename, static_filenames)
+        html_file_name, post_html, title = html.postfile_to_html(POST_INPUT_DIR + filename, static_filenames)
+        files_with_titles.append((html_file_name, title))
         str_to_file(OUTPUT_DIR + html_file_name, post_html)
+
+    # make homepage
+    # need to order by date and refactor
+    homepage_post_str = '\n'.join('<a href="{0}">{1}</a>'.format(*file_title)
+                                  for file_title in files_with_titles)
+    body_html = markup.to_html(homepage_post_str)
+    template = '/projects/site/templates/base.html'
+    post_html = html.make_html_page(template, body_html, "", static_filenames, 'Home')
+    str_to_file(OUTPUT_DIR + 'home', post_html)
 
 
 def do_css(css_input_dir, css_output_dir):
