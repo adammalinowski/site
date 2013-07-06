@@ -1,11 +1,11 @@
 html {
     background-color: #1A1918;
-    color: #DDD;
+    color: #CCC;
 }
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
 h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited
 {
-    color: #DDD;
+    color: #CCC;
 }
