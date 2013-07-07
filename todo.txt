@@ -1,17 +1,19 @@
 Todo
 
 
+in order to have line followed by list, need to not have paragraph but
+brs. which means you dont get the top margin. which means... what
+everything shou;d instead push down? dont really understand the styling.
+
 general:
 - homepage
-- dark style links
-- fix links so they work both locally and as html site
-  - for now can stick to relative links...
+- style links
 - warnings:
   - trailing char after link e.g. http:example.com,
 - handling for un-publishing? also version/overwrite/removal handling
 - tags
 - description field
-- internal anchors for paragraphs/subtitles
+- internal anchors for paragraphs?
 - xotd
 
 markup:

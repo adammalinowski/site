@@ -1,7 +1,5 @@
 """ Read and manipulate CSS files """
 
-import cssmin
-
 import os
 from operator import add
 from functools import partial

@@ -2,16 +2,16 @@
 html {
     background-color: #FAF9F9;
     color: #222;
-    line-height: 1.38em;
+    line-height: 1.4em;
 }
 
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-ul { margin: 0; padding: 0 0 0 1em; }
+ul { margin: .8em 0; padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
-ol { margin: 0; padding: 0 0 0 1.4em; }
-li { margin: 0; padding: 0 0 .4em 0; }
+ol { margin: .8em 0; padding: 0 0 0 1.4em; }
+li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
 h1 { font-size: 1.5em; margin: 1em 0 .7 0;}  /* page title */
