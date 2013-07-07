@@ -5,6 +5,9 @@ html {
     line-height: 1.38em;
 }
 
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
 ul { margin: 0; padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
 ol { margin: 0; padding: 0 0 0 1.4em; }
@@ -32,7 +35,7 @@ p, pre { margin: .8em 0; }
 }
 
 #body {
-    font-size: 18px;
+    font-size: 17px;
     padding-top: 1em;
 }
 

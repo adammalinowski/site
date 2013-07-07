@@ -2,6 +2,7 @@
 html {
     background-color: #1A1918;
     color: #CCC;
+    line-height: 1.4em;
 }
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
@@ -10,3 +11,8 @@ h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited
 {
     color: #CCC;
 }
+
+a:link { color: #77AABB; }
+/*a:hover { font-weight: bold;}*/
+/*a:focus { color: #006699;}*/
+a:visited { color: #BB88BB; }
