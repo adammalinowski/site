@@ -62,3 +62,6 @@ def fmap(func):
 def ffilter(func):
     """ A partially applied filter, awaiting the seq argument """
     return partial(filter, func)
+
+def pmap(func, fix_args, seq):
+    return map(partial(func, *fix_args), seq)

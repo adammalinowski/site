@@ -14,6 +14,8 @@ general:
 - internal anchors for paragraphs/subtitles
 - xotd
 - publish source, add link to each post
+- make thing to handle errors in drafts, and output something useful at least
+- testing!
 
 markup:
 - fix lists
