@@ -13,6 +13,7 @@ general:
 - description field
 - internal anchors for paragraphs/subtitles
 - xotd
+- publish source, add link to each post
 
 markup:
 - fix lists
