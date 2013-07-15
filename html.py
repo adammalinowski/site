@@ -5,18 +5,16 @@ import markup, metadata
 from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
 from miscutils import logger
 
-log = logger(0)
+log = logger()
 
 
-@log
-def postfile_to_html(post_filename, static_filenames):
+def postfile_to_html(post_filename, static_filenames, template):
     """ """
     post_str = file_to_str(post_filename)
     title, raw_body, raw_metadata = split_post_metadata(post_str)
     html_file_name = post_filename.split('/')[-1][:-4]  # remove mandatory .txt
     body_html = markup.to_html(raw_body)
     metadata_html = metadata.to_html(raw_metadata)
-    template = '/projects/site/templates/base.html'
     post_html = make_html_page(template, body_html, metadata_html, static_filenames, title)
     return html_file_name, post_html, title
 
@@ -34,7 +32,6 @@ def split_post_metadata(raw_post):
         return (title, result[0], result[1])
 
 
-@log
 def make_html_page(template, body_html, metadata_html, static_filenames, title):
     """ Create HTML file """
 

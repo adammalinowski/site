@@ -1,8 +1,13 @@
 import os
 import argparse
+import logging
 
-import assets, html, markup
+# package stuff
+import assets
+import html
+import markup
 
+# package utils
 from miscutils import get_cachebusting_name
 from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap
 
@@ -24,11 +29,13 @@ post_filenames = lcompose([
     ])
 
 
+template = '/projects/site/templates/base.html'
+
 def make_page(input_dir, output_dir, static_filenames, filename):
     """ Take in dir & filename, make html & output. Return filename & title """
 
     html_file_name, post_html, title =\
-        html.postfile_to_html(input_dir + filename, static_filenames)
+        html.postfile_to_html(input_dir + filename, static_filenames, template)
     str_to_file(output_dir + html_file_name, post_html)
     return (html_file_name, title)
 
@@ -40,7 +47,6 @@ def make_homepage(output_dir, static_filenames, files_with_titles):
     homepage_post_str = '\n'.join('<a href="{0}">{1}</a>'.format(*file_title)
                                   for file_title in files_with_titles)
     body_html = markup.to_html(homepage_post_str)
-    template = '/projects/site/templates/base.html'
     post_html = html.make_html_page(template, body_html, "", static_filenames,
                                     'Home')
     str_to_file(output_dir + 'home', post_html)
@@ -97,6 +103,17 @@ def do_js(js_input_dir, js_output_dir):
     return js_name
 
 
+def configure_logging(level):
+    logger = logging.getLogger("logger")
+    if level == 0:
+        logger.setLevel(logging.WARNING)
+    elif level == 1:
+        logger.setLevel(logging.INFO)
+    elif level == 2:
+        logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
+
+
 if __name__ == "__main__":
     """ Take command line arg of whether to publish draft or real, do it """
 
@@ -104,8 +121,13 @@ if __name__ == "__main__":
     parser.add_argument("output",
                         choices=['publish', 'draft'],
                         help="either publish or output drafts")
+    parser.add_argument("-v", "--verbosity",
+                        type=int,
+                        choices=[0, 1, 2],
+                        help="choose verbosity; 0 = None, 1 = Some, 2 = All")
     parsed_args = parser.parse_args()
     publish = parsed_args.output == 'publish'
+    verbosity = parsed_args.verbosity
     dirs = {
         'css_in': CSS_INPUT_DIR,
         'css_out': CSS_INPUT_DIR,
@@ -114,4 +136,6 @@ if __name__ == "__main__":
         'post_in': POST_INPUT_DIR if publish else DRAFT_INPUT_DIR,
         'site_out': PUBLISH_OUTPUT_DIR if publish else DRAFT_OUTPUT_DIR,
     }
+    configure_logging(verbosity)
     main(dirs)
+    print 'done'

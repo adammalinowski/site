@@ -7,10 +7,9 @@ from functools import partial
 from funcutils import file_to_str, str_to_file, lcompose, fmap, ffilter, atr
 from miscutils import logger
 
-log = logger(0)
+log = logger()
 
 
-@log
 def get_path_files_with_ext(extension, path):
     """ Get full file path of all extension files in supplied dir """
     return [path + file_name for file_name in os.listdir(path)

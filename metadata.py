@@ -3,7 +3,7 @@ import re
 from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter
 from miscutils import logger
 
-log = logger(0)
+log = logger()
 
 
 def lower_dict_keys(adict):
@@ -20,7 +20,6 @@ raw_metadata_to_raw_dict = lcompose([
     ])
 
 
-@log
 def raw_dict_to_data_dict(metadata):
     """ Convert metadata string input to data according to type """
 
@@ -32,7 +31,6 @@ def raw_dict_to_data_dict(metadata):
                 if k in metadata_funcs)
 
 
-@log
 def data_dict_to_html(metadata_data):
     """ Convert metadata data to html """
 

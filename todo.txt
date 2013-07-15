@@ -7,11 +7,9 @@ everything shou;d instead push down? dont really understand the styling.
 
 general:
 - fix homepage
-- make logging less awful
 - dark style links
 - handling for un-publishing? also version/overwrite/removal handling
 - description field
-- internal anchors for paragraphs?
 - xotd
 - publish source, add link to each post
 - make thing to handle errors in drafts, and output something useful at least
@@ -21,9 +19,11 @@ general:
 - warnings:
   - trailing char after link e.g. http:example.com,
 - split config out to separate file in order to have multiple sites?
+- internal anchors for paragraphs?
+- javascript dynamic TOC?
 
 markup:
-- fix lists
+- fix lists (allow line immediately before list)
 - quotes (inner & block)
 - optional line breaking?
 - inline tags

@@ -6,10 +6,9 @@ from itertools import takewhile
 from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
 from miscutils import logger
 
-log = logger(1)
+log = logger()
 
 
-@log
 def xotd(xotd_post):
     """ Takes a thing-of-the-day
 
@@ -35,7 +34,6 @@ def xotd(xotd_post):
 
 
 # refactor/rewrite
-@log
 def post_to_chunks(post):
     """ Split a post into lists of lines, broken by empty lines
 
@@ -56,7 +54,6 @@ def post_to_chunks(post):
     return chunks
 
 
-@log
 def chunk_to_typed_chunk(chunk):
     """ Take chunk, return tuple of (elem type, chunk with chunk markup removed)
 
@@ -89,7 +86,6 @@ def chunk_to_typed_chunk(chunk):
     return ('p', chunk)  # everything else is a paragraph
 
 
-@log
 def parse_list_chunk(chunk):
     """ Convert a chunk into a list of (list_type, indent, line) tuples """
 
@@ -220,7 +216,7 @@ def chunk_type_wrap(chunk_type, chunk):
     return '<%s>%s</%s>' % (chunk_type, '<br>'.join(chunk), chunk_type)
 
 
-@log
+
 def typed_chunk_to_html(typed_chunk):
     """ Convert a typed chunk to html """
 

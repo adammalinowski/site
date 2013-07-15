@@ -1,10 +1,13 @@
 import string
+import logging
 from functools import wraps
 
 from funcutils import pipe
 
+actual_logger = logging.getLogger("logger")
 
-def logger(loglevel=0):
+
+def logger():
     """ Make a decorator with appropriate level of logging """
 
     def log(func):
@@ -12,12 +15,10 @@ def logger(loglevel=0):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if loglevel == 0: print 'doing %s' % func.__name__
-            elif loglevel == 1:
-                print '\ndoing: %s with args: %s and kwargs: %s'\
-                      % (func.__name__, args, kwargs)
+            actual_logger.info('doing %s' % func.__name__)
+            actual_logger.debug('with args: %s and kwargs: %s' % ( args, kwargs))
             result = func(*args, **kwargs)
-            if loglevel == 1: print '\nresult: ', result
+            actual_logger.debug('\nresult: %s' % result)
             return result
         return wrapper
     return log
