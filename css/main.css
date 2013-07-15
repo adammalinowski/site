@@ -8,24 +8,24 @@ html {
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+h1 { font-size: 1.5em; margin: 1em 0 .7 0; }  /* page title */
+h2 { font-size: 1.28em; margin: 1.4em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
+h3 { font-size: 1.07em; margin: 1.4em 0 .9em 0; letter-spacing: .01em; }  /* minor section */
+
+h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
+h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
+h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
+h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited {
+    color: #222;
+    text-decoration: none;
+}
+
+
 ul { margin: .8em 0; padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
 ol { margin: .8em 0; padding: 0 0 0 1.4em; }
 li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
-
-h1 { font-size: 1.5em; margin: 1em 0 .7 0;}  /* page title */
-h2 { font-size: 1.28em; margin: 1.4em 0 .8em 0;}  /* major section (rare) */
-h3 { font-size: 1.07em; margin: 1.4em 0 .9em 0;}  /* minor section */
-
-h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
-h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
-h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
-h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited
-{
-    color: #222;
-    text-decoration: none;
-}
 
 p, pre { margin: .8em 0; }
 

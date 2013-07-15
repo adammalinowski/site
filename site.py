@@ -16,8 +16,8 @@ PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 HOME = os.path.expanduser("~")
 POST_INPUT_DIR = HOME + '/posts/publish/'
 DRAFT_INPUT_DIR = HOME + '/posts/drafts/'
-PUBLISH_OUTPUT_DIR = HOME + '/posts/output/'
-DRAFT_OUTPUT_DIR = HOME + '/posts/output_drafts/'
+PUBLISH_OUTPUT_DIR = HOME + '/posts/publish_output/'
+DRAFT_OUTPUT_DIR = HOME + '/posts/drafts_output/'
 CSS_INPUT_DIR = PROJECT_ROOT + '/css/'
 JS_INPUT_DIR = PROJECT_ROOT + '/js/'
 
@@ -34,21 +34,27 @@ template = '/projects/site/templates/base.html'
 def make_page(input_dir, output_dir, static_filenames, filename):
     """ Take in dir & filename, make html & output. Return filename & title """
 
-    html_file_name, post_html, title =\
-        html.postfile_to_html(input_dir + filename, static_filenames, template)
-    str_to_file(output_dir + html_file_name, post_html)
-    return (html_file_name, title)
+    post_data, post_html = html.post_file_to_post_data(input_dir + filename,
+                                            static_filenames, template)
+    str_to_file(output_dir + post_data['filename'], post_html)
+    return post_data
 
 
-def make_homepage(output_dir, static_filenames, files_with_titles):
+def make_homepage(output_dir, static_filenames, post_datas):
     """ Make the homepage as list of links to other pages """
 
-    # need to order by date and refactor
-    homepage_post_str = '\n'.join('<a href="{0}">{1}</a>'.format(*file_title)
-                                  for file_title in files_with_titles)
-    body_html = markup.to_html(homepage_post_str)
-    post_html = html.make_html_page(template, body_html, "", static_filenames,
-                                    'Home')
+    sorted_post_data = sorted(post_datas,
+                              key=lambda pd: pd['metadata']['date'],
+                              reverse=True)
+    homepage_post_str = '\n'.join(
+        '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
+        for post_data in sorted_post_data)
+    post_data = {
+        'body_html': markup.to_html(homepage_post_str),
+        'metadata_html': "",
+        'title': "Home",
+    }
+    post_html = html.make_html_page(template, static_filenames, post_data)
     str_to_file(output_dir + 'home', post_html)
 
 
@@ -56,10 +62,10 @@ def main(dirs):
     """ Build the site """
 
     static_filenames = make_static_assets(dirs)
-    files_with_titles = pmap(make_page,
-                             (dirs['post_in'], dirs['site_out'], static_filenames),
-                             post_filenames(dirs['post_in']))
-    make_homepage(dirs['site_out'], static_filenames, files_with_titles)
+    post_datas = pmap(make_page,
+                      (dirs['post_in'], dirs['site_out'], static_filenames),
+                      post_filenames(dirs['post_in']))
+    make_homepage(dirs['site_out'], static_filenames, post_datas)
 
 
 def make_static_assets(dirs):

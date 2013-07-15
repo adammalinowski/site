@@ -1,12 +1,7 @@
 Todo
 
 
-in order to have line followed by list, need to not have paragraph but
-brs. which means you dont get the top margin. which means... what
-everything shou;d instead push down? dont really understand the styling.
-
 general:
-- fix homepage
 - dark style links
 - handling for un-publishing? also version/overwrite/removal handling
 - description field
