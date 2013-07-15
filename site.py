@@ -57,8 +57,10 @@ def main(dirs):
 
 
 def make_static_assets(dirs):
-    css_filename, dark_css_filename = do_css(dirs)
-    js_filename = do_js(dirs)
+    """ Make css & js files, return dict of filenames """
+
+    css_filename, dark_css_filename = do_css(dirs['css_in'], dirs['site_out'])
+    js_filename = do_js(dirs['js_in'], dirs['site_out'])
     return {
         'primary_css': css_filename,
         'dark_css': dark_css_filename,
@@ -66,10 +68,8 @@ def make_static_assets(dirs):
     }
 
 
-def do_css(dirs):
+def do_css(css_input_dir, css_output_dir):
     """ Take input css & dark css, combine, cachebust, replace """
-
-    css_input_dir, css_output_dir = dirs['css_in'], dirs['site_out']
 
     # primary css
     css_str = assets.combine_css(css_input_dir)
@@ -87,13 +87,12 @@ def do_css(dirs):
     return css_name, dark_css_name
 
 
-def do_js(dirs):
+def do_js(js_input_dir, js_output_dir):
     """ Take input js, combine, cachebust, replace existing output """
 
-    js_input_dir, js_output_dir = dirs['js_in'], dirs['site_out']
+    assets.remove_extention('.js', js_output_dir)
     js_str = assets.get_js(js_input_dir)
     js_name = get_cachebusting_name(js_str) + '.js'
-    assets.remove_extention('.js', js_output_dir)
     str_to_file(js_output_dir + js_name, js_str)
     return js_name
 
@@ -102,7 +101,8 @@ if __name__ == "__main__":
     """ Take command line arg of whether to publish draft or real, do it """
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("output", choices=['publish', 'draft'],
+    parser.add_argument("output",
+                        choices=['publish', 'draft'],
                         help="either publish or output drafts")
     parsed_args = parser.parse_args()
     publish = parsed_args.output == 'publish'

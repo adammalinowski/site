@@ -2,20 +2,20 @@ Todo
 
 
 general:
-- homepage
+- fix homepage
+- make logging less awful
 - dark style links
-- fix links so they work both locally and as html site
-  - for now can stick to relative links...
-- warnings:
-  - trailing char after link e.g. http:example.com,
 - handling for un-publishing? also version/overwrite/removal handling
-- tags
 - description field
 - internal anchors for paragraphs/subtitles
 - xotd
 - publish source, add link to each post
 - make thing to handle errors in drafts, and output something useful at least
 - testing!
+- fix links so they work both locally and as html site
+  - for now can stick to relative links...
+- warnings:
+  - trailing char after link e.g. http:example.com,
 
 markup:
 - fix lists
