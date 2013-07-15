@@ -20,6 +20,7 @@ general:
   - for now can stick to relative links...
 - warnings:
   - trailing char after link e.g. http:example.com,
+- split config out to separate file in order to have multiple sites?
 
 markup:
 - fix lists
