@@ -4,8 +4,8 @@ import os
 from operator import add
 from functools import partial
 
-from funcutils import file_to_str, str_to_file, lcompose, fmap, ffilter, atr
-from miscutils import logger
+from funcutils import file_to_str, str_to_file, lcompose, fmap, ffilter, atr, pipe
+from miscutils import logger, num_to_base36
 
 log = logger()
 
@@ -39,3 +39,7 @@ get_js = lcompose([
 def remove_extention(extension, path):
     """ Delete all files with given extension """
     map(os.remove, get_path_files_with_ext(extension, path))
+
+
+""" Make a nice short readable str (mostly) uniquely representing a str """
+get_cachebusting_name = lcompose([hash, abs, num_to_base36])

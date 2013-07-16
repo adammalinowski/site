@@ -4,24 +4,14 @@ import logging
 from functools import partial
 
 # package stuff
+import conf
 import assets
 import html
 import markup
 import metadata
 
 # package utils
-from miscutils import get_cachebusting_name
 from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap
-
-
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-HOME = os.path.expanduser("~")
-POST_INPUT_DIR = HOME + '/posts/publish/'
-DRAFT_INPUT_DIR = HOME + '/posts/drafts/'
-PUBLISH_OUTPUT_DIR = HOME + '/posts/publish_output/'
-DRAFT_OUTPUT_DIR = HOME + '/posts/drafts_output/'
-CSS_INPUT_DIR = PROJECT_ROOT + '/css/'
-JS_INPUT_DIR = PROJECT_ROOT + '/js/'
 
 
 """ Get filename of posts for conversion """
@@ -102,11 +92,11 @@ def do_css(css_input_dir, css_output_dir):
 
     # primary css
     css_str = assets.combine_css(css_input_dir)
-    css_name = get_cachebusting_name(css_str) + '.css'
+    css_name = assets.get_cachebusting_name(css_str) + '.css'
 
     # dark css
     dark_css_str = file_to_str(css_input_dir + 'dark.css')
-    dark_css_name = get_cachebusting_name(dark_css_str) + '.css'
+    dark_css_name = assets.get_cachebusting_name(dark_css_str) + '.css'
 
     # remove and write
     assets.remove_extention('.css', css_output_dir)
@@ -121,7 +111,7 @@ def do_js(js_input_dir, js_output_dir):
 
     assets.remove_extention('.js', js_output_dir)
     js_str = assets.get_js(js_input_dir)
-    js_name = get_cachebusting_name(js_str) + '.js'
+    js_name = assets.get_cachebusting_name(js_str) + '.js'
     str_to_file(js_output_dir + js_name, js_str)
     return js_name
 
@@ -139,8 +129,8 @@ def configure_logging(level):
     logger.addHandler(logging.StreamHandler())
 
 
-if __name__ == "__main__":
-    """ Take command line arg of whether to publish draft or real, do it """
+def get_args():
+    """ Get publish True/False and verbosity from command line args """
 
     parser = argparse.ArgumentParser()
     parser.add_argument("output",
@@ -153,13 +143,20 @@ if __name__ == "__main__":
     parsed_args = parser.parse_args()
     publish = parsed_args.output == 'publish'
     verbosity = parsed_args.verbosity
+    return publish, verbosity
+
+
+if __name__ == "__main__":
+    """ Use command line args and config to do the business """
+
+    pub, verbosity = get_args()
     opts = {
-        'css_in': CSS_INPUT_DIR,
-        'css_out': CSS_INPUT_DIR,
-        'js_in': JS_INPUT_DIR,
-        'js_in': JS_INPUT_DIR,
-        'post_in': POST_INPUT_DIR if publish else DRAFT_INPUT_DIR,
-        'site_out': PUBLISH_OUTPUT_DIR if publish else DRAFT_OUTPUT_DIR,
+        'css_in': conf.CSS_INPUT_DIR,
+        'css_out': conf.CSS_INPUT_DIR,
+        'js_in': conf.JS_INPUT_DIR,
+        'js_in': conf.JS_INPUT_DIR,
+        'post_in': conf.POST_INPUT_DIR if pub else conf.DRAFT_INPUT_DIR,
+        'site_out': conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR,
         'template': '/projects/site/templates/base.html',
     }
     configure_logging(verbosity)

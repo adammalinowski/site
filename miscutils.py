@@ -2,7 +2,6 @@ import string
 import logging
 from functools import wraps
 
-from funcutils import pipe
 
 actual_logger = logging.getLogger("logger")
 
@@ -42,8 +41,3 @@ def num_to_base(anint, alphabet):
 def num_to_base36(anint):
     alphabet = string.ascii_lowercase + string.digits
     return num_to_base(anint, alphabet)
-
-
-def get_cachebusting_name(astr):
-    """ Make a nice short readable str (mostly) uniquely representing a str """
-    return pipe(astr, [hash, abs, num_to_base36])
