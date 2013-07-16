@@ -2,11 +2,10 @@ Todo
 
 
 general:
-- dark style links
+- improve style (links...)
 - handling for un-publishing? also version/overwrite/removal handling
 - description field
 - xotd
-- publish source, add link to each post
 - make thing to handle errors in drafts, and output something useful at least
 - testing!
 - fix links so they work both locally and as html site

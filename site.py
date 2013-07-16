@@ -7,6 +7,7 @@ from functools import partial
 import assets
 import html
 import markup
+import metadata
 
 # package utils
 from miscutils import get_cachebusting_name
@@ -33,19 +34,31 @@ post_filenames = lcompose([
 def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     """ Take in dir & filename, make html & output. Return post data"""
 
-    post_full_path = input_dir + filename
-    post_str = file_to_str(post_full_filename)
-    post_data = html.post_file_to_post_data(post_str)
+    post_str = file_to_str(input_dir + filename)
+    source_output_filename = filename.replace(' ', '_')
+    post_output_filename = source_output_filename[:-4]  # remove mandatory .txt,
+    title, raw_body, raw_metadata = html.split_post_metadata(post_str)
+    body_html = markup.to_html(raw_body)
+    metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
+    metadata_data['source'] = output_dir + source_output_filename
+    metadata_html = metadata.datadict_to_html(metadata_data)
+    post_data = {
+        'body_html': body_html,
+        'metadata_html': metadata_html,
+        'metadata': metadata_data,
+        'title': title,
+        'filename': post_output_filename,
+        }
     post_html = post_data_to_html_page(post_data)
-    output_filename = post_filename[:-4]  # remove mandatory .txt,
-    str_to_file(output_dir + output_filename, post_html)
+    str_to_file(output_dir + post_output_filename, post_html)
+    str_to_file(output_dir + source_output_filename, post_str)
     return post_data
 
 
 def make_homepage(output_dir, post_data_to_html_page, post_datas):
     """ Make the homepage as list of links to other pages """
 
-    sorted_post_data = sorted(post_datas, reverse=True
+    sorted_post_data = sorted(post_datas, reverse=True,
                               key=lambda pd: pd['metadata']['date'])
     homepage_post_str = '\n'.join(
         '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])

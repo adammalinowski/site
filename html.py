@@ -8,33 +8,13 @@ from miscutils import logger
 log = logger()
 
 
-def post_str_to_post_data(post_str):
-    """ Convert raw post to post data """
-
-    title, raw_body, raw_metadata = split_post_metadata(post_str)
-    body_html = markup.to_html(raw_body)
-    metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
-    metadata_html = metadata.datadict_to_html(metadata_data)
-    post_data = {
-        'body_html': body_html,
-        'metadata_html': metadata_html,
-        'metadata': metadata_data,
-        'title': title,
-        }
-    return post_data
-
-
 def split_post_metadata(raw_post):
-    """ Take post text, return raw post and raw metadata """
+    """ Take raw post text, return title, raw post and raw metadata """
 
     title, _, rest = raw_post.partition('\n')
     result = re.split(r'~{3,}', rest)
-    result_len = len(result)
-    assert result_len < 3, 'Invalid markup'
-    if len(result) == 1:
-        return (title, result[0], '')
-    elif len(result) == 2:
-        return (title, result[0], result[1])
+    assert len(result) == 2, 'Invalid markup'
+    return (title, result[0], result[1])
 
 
 clean_template = lcompose([

@@ -50,7 +50,7 @@ def datadict_to_html(metadata_data):
     date_html = '<span id="date">%s</span>' % metadata_data['date']
     html_list.append(date_html)
 
-    source_html = '<span id="source">%s</span>' % metadata_data['source']
+    source_html = '<a href="%s" id="source">source</a>' % metadata_data['source']
     html_list.append(source_html)
 
     return ''.join(html_list)
