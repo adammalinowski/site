@@ -45,9 +45,14 @@ def datadict_to_html(metadata_data):
     """ Convert metadata data to html """
 
     html_list = []
+
     assert 'date' in metadata_data, 'Missing date'
     date_html = '<span id="date">%s</span>' % metadata_data['date']
     html_list.append(date_html)
+
+    source_html = '<span id="source">%s</span>' % metadata_data['source']
+    html_list.append(source_html)
+
     return ''.join(html_list)
 
 

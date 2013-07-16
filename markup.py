@@ -34,6 +34,7 @@ def xotd(xotd_post):
 
 
 # refactor/rewrite
+@log
 def post_to_chunks(post):
     """ Split a post into lists of lines, broken by empty lines
 

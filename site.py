@@ -1,6 +1,7 @@
 import os
 import argparse
 import logging
+from functools import partial
 
 # package stuff
 import assets
@@ -29,23 +30,23 @@ post_filenames = lcompose([
     ])
 
 
-template = '/projects/site/templates/base.html'
+def make_page(input_dir, output_dir, post_data_to_html_page, filename):
+    """ Take in dir & filename, make html & output. Return post data"""
 
-def make_page(input_dir, output_dir, static_filenames, filename):
-    """ Take in dir & filename, make html & output. Return filename & title """
-
-    post_data, post_html = html.post_file_to_post_data(input_dir + filename,
-                                            static_filenames, template)
-    str_to_file(output_dir + post_data['filename'], post_html)
+    post_full_path = input_dir + filename
+    post_str = file_to_str(post_full_filename)
+    post_data = html.post_file_to_post_data(post_str)
+    post_html = post_data_to_html_page(post_data)
+    output_filename = post_filename[:-4]  # remove mandatory .txt,
+    str_to_file(output_dir + output_filename, post_html)
     return post_data
 
 
-def make_homepage(output_dir, static_filenames, post_datas):
+def make_homepage(output_dir, post_data_to_html_page, post_datas):
     """ Make the homepage as list of links to other pages """
 
-    sorted_post_data = sorted(post_datas,
-                              key=lambda pd: pd['metadata']['date'],
-                              reverse=True)
+    sorted_post_data = sorted(post_datas, reverse=True
+                              key=lambda pd: pd['metadata']['date'])
     homepage_post_str = '\n'.join(
         '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
         for post_data in sorted_post_data)
@@ -54,25 +55,28 @@ def make_homepage(output_dir, static_filenames, post_datas):
         'metadata_html': "",
         'title': "Home",
     }
-    post_html = html.make_html_page(template, static_filenames, post_data)
+    post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + 'home', post_html)
 
 
-def main(dirs):
+def main(opts):
     """ Build the site """
 
-    static_filenames = make_static_assets(dirs)
+    static_filenames = make_static_assets(opts)
+    template = html.clean_template(opts['template'])
+    post_data_to_html_page = partial(html.data_to_html_page,
+                                     *(template, static_filenames))
     post_datas = pmap(make_page,
-                      (dirs['post_in'], dirs['site_out'], static_filenames),
-                      post_filenames(dirs['post_in']))
-    make_homepage(dirs['site_out'], static_filenames, post_datas)
+                      (opts['post_in'], opts['site_out'], post_data_to_html_page),
+                      post_filenames(opts['post_in']))
+    make_homepage(opts['site_out'], post_data_to_html_page, post_datas)
 
 
-def make_static_assets(dirs):
+def make_static_assets(opts):
     """ Make css & js files, return dict of filenames """
 
-    css_filename, dark_css_filename = do_css(dirs['css_in'], dirs['site_out'])
-    js_filename = do_js(dirs['js_in'], dirs['site_out'])
+    css_filename, dark_css_filename = do_css(opts['css_in'], opts['site_out'])
+    js_filename = do_js(opts['js_in'], opts['site_out'])
     return {
         'primary_css': css_filename,
         'dark_css': dark_css_filename,
@@ -110,6 +114,8 @@ def do_js(js_input_dir, js_output_dir):
 
 
 def configure_logging(level):
+    """ Set up the logger with level from command line arg """
+
     logger = logging.getLogger("logger")
     if level == 0:
         logger.setLevel(logging.WARNING)
@@ -134,14 +140,15 @@ if __name__ == "__main__":
     parsed_args = parser.parse_args()
     publish = parsed_args.output == 'publish'
     verbosity = parsed_args.verbosity
-    dirs = {
+    opts = {
         'css_in': CSS_INPUT_DIR,
         'css_out': CSS_INPUT_DIR,
         'js_in': JS_INPUT_DIR,
         'js_in': JS_INPUT_DIR,
         'post_in': POST_INPUT_DIR if publish else DRAFT_INPUT_DIR,
         'site_out': PUBLISH_OUTPUT_DIR if publish else DRAFT_OUTPUT_DIR,
+        'template': '/projects/site/templates/base.html',
     }
     configure_logging(verbosity)
-    main(dirs)
+    main(opts)
     print 'done'
