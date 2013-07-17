@@ -11,7 +11,6 @@ general:
   - for now can stick to relative links...
 - warnings:
   - trailing char after link e.g. http:example.com,
-- split config out to separate file in order to have multiple sites?
 - internal anchors for paragraphs?
 - javascript dynamic TOC?
 - description field
