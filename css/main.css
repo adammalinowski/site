@@ -34,7 +34,7 @@ li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
 p, pre { margin: .8em 0; }
-code,kbd,pre,samp { font-size: .85em; }
+code,kbd,pre,samp { background-color: #EEE; font-size: .9em; }
 
 #centercol {
     margin: 0 auto;

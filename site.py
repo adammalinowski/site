@@ -33,7 +33,7 @@ def raw_body_to_html(raw_body):
 def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     """ Take in dir & filename, make html & output. Return post data"""
 
-    post_str = file_to_str(input_dir + filename)    
+    post_str = file_to_str(input_dir + filename)
     source_output_filename = html.urlize(filename)
     post_output_filename = source_output_filename[:-4]  # remove mandatory .txt,
     title, raw_body, raw_metadata = html.split_post_metadata(post_str)
@@ -146,7 +146,7 @@ def configure_logging(level):
 
 
 def get_args():
-    """ Get publish True/False and verbosity from command line args 
+    """ Get publish True/False and verbosity from command line args
 
     subparsers see
 
@@ -164,8 +164,8 @@ def get_args():
     parser_output = subparsers.add_parser('output',
                             help="output either publish posts or draft posts")
     parser_output.add_argument('output',
-                               choices=['publish', 'draft'],                     
-                               default='publish',          
+                               choices=['publish', 'draft'],
+                               default='publish',
                                help="coose 'publish' or 'draft' posts to output")
 
     # make the test post sub-command parser
@@ -180,8 +180,8 @@ if __name__ == "__main__":
     """ Use command line args and config to do the business """
 
     args = get_args()
-    print args
-    configure_logging(args['verbosity'])
+    #print args
+    #configure_logging(args['verbosity'])
     if args.get('test'):
         print raw_body_to_html(args['test'])
     else:
@@ -194,6 +194,6 @@ if __name__ == "__main__":
             'post_in': conf.POST_INPUT_DIR if pub else conf.DRAFT_INPUT_DIR,
             'site_out': conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR,
             'template': '/projects/site/templates/base.html',
-        }        
+        }
         main(opts)
         print 'done'

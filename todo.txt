@@ -16,8 +16,9 @@ general:
 - internal anchors for paragraphs?
 
 markup:
+- inline tags (different class)
+- internal links (semi-auto and explicit)
 - fix lists (allow line immediately before list)
 - quotes (inner & block)
 - optional line breaking?
-- inline tags
 - commas (& other) after links

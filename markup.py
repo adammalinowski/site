@@ -40,7 +40,7 @@ def inline_tag_thing(raw_body):
     tags = []
 
     def replace(matched):
-        """ Take matched, mutate tag list, return as link markup """
+        """ Take matched, mutate closed-over tag list, return as link markup """
 
         matched_str = matched.groups()[0]
         tags.append(matched_str)
