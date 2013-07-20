@@ -1,8 +1,12 @@
 /* primary site css */
+html, button, input, select, textarea {
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
 html {
     background-color: #FAF9F9;
     color: #222;
-    line-height: 1.4em;
+    line-height: 1.5em;
     font-size: 17px;
 }
 
@@ -10,8 +14,8 @@ a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 h1 { font-size: 1.5em; margin: 1em 0 .7 0; }  /* page title */
-h2 { font-size: 1.28em; margin: 1.4em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
-h3 { font-size: 1.07em; margin: 1.4em 0 .9em 0; letter-spacing: .01em; }  /* minor section */
+h2 { font-size: 1.28em; margin: 1.5em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
+h3 { font-size: 1.15em; margin: 1.5em 0 .8em 0; letter-spacing: .01em; }  /* minor section */
 
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
@@ -30,6 +34,7 @@ li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
 p, pre { margin: .8em 0; }
+code,kbd,pre,samp { font-size: .85em; }
 
 #centercol {
     margin: 0 auto;
@@ -41,14 +46,14 @@ p, pre { margin: .8em 0; }
     display: none;
 }
 /* for screen to be large enough needs to be center col + toc width */
-@media only screen and (min-width: 1180px) {
+@media only screen and (min-width: 1200px) {
     /* centered, then margin-left'd to correct position */
     #toc {
         display: inline;
         left: 50%;
-        font-size: .7em;
+        font-size: .75em;
         position: fixed;
-        margin-left: -580px;
+        margin-left: -630px;
         top: 1.5em;
         width: 210px;
     }

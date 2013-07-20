@@ -41,7 +41,7 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
         'metadata': metadata_data,
         'title': title,
         'filename': post_output_filename,
-        'toc': markup.toc_list_to_toc(toc_list),
+        'toc': 'Contents:\n' + markup.toc_list_to_toc(toc_list),
         }
     post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + post_output_filename, post_html)
