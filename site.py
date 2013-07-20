@@ -21,16 +21,26 @@ post_filenames = lcompose([
     ])
 
 
+def raw_body_to_html(raw_body):
+    """ just for testing but need proper abstraction """
+
+    raw_body, tags = markup.inline_tag_thing(raw_body)
+    typed_chunks = markup.post_to_typed_chunks(raw_body)
+    body_html = markup.typed_chunks_to_html_page(typed_chunks)
+    return body_html
+
+
 def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     """ Take in dir & filename, make html & output. Return post data"""
 
-    post_str = file_to_str(input_dir + filename)
-    source_output_filename = filename.replace(' ', '_')
+    post_str = file_to_str(input_dir + filename)    
+    source_output_filename = html.urlize(filename)
     post_output_filename = source_output_filename[:-4]  # remove mandatory .txt,
     title, raw_body, raw_metadata = html.split_post_metadata(post_str)
+    raw_body, tags = markup.inline_tag_thing(raw_body)
     typed_chunks = markup.post_to_typed_chunks(raw_body)
     toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
-    # wtf mutate?!?!?!
+    # todo wtf mutate?!?!?!
     body_html = markup.typed_chunks_to_html_page(typed_chunks)
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
     metadata_data['source'] = output_dir + source_output_filename
@@ -136,35 +146,54 @@ def configure_logging(level):
 
 
 def get_args():
-    """ Get publish True/False and verbosity from command line args """
+    """ Get publish True/False and verbosity from command line args 
+
+    subparsers see
+
+    """
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("output",
-                        choices=['publish', 'draft'],
-                        help="either publish or output drafts")
     parser.add_argument("-v", "--verbosity",
                         type=int,
                         choices=[0, 1, 2],
+                        default=0,
                         help="choose verbosity; 0 = None, 1 = Some, 2 = All")
-    parsed_args = parser.parse_args()
-    publish = parsed_args.output == 'publish'
-    verbosity = parsed_args.verbosity
-    return publish, verbosity
+    subparsers = parser.add_subparsers(help='sub-command help')
+
+    # make the output sub-command parser
+    parser_output = subparsers.add_parser('output',
+                            help="output either publish posts or draft posts")
+    parser_output.add_argument('output',
+                               choices=['publish', 'draft'],                     
+                               default='publish',          
+                               help="coose 'publish' or 'draft' posts to output")
+
+    # make the test post sub-command parser
+    parser_test = subparsers.add_parser('test', help='tranform test input as raw body to html')
+    parser_test.add_argument('input',
+                             help="input test input")
+
+    return vars(parser.parse_args())
 
 
 if __name__ == "__main__":
     """ Use command line args and config to do the business """
 
-    pub, verbosity = get_args()
-    opts = {
-        'css_in': conf.CSS_INPUT_DIR,
-        'css_out': conf.CSS_INPUT_DIR,
-        'js_in': conf.JS_INPUT_DIR,
-        'js_in': conf.JS_INPUT_DIR,
-        'post_in': conf.POST_INPUT_DIR if pub else conf.DRAFT_INPUT_DIR,
-        'site_out': conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR,
-        'template': '/projects/site/templates/base.html',
-    }
-    configure_logging(verbosity)
-    main(opts)
-    print 'done'
+    args = get_args()
+    print args
+    configure_logging(args['verbosity'])
+    if args.get('test'):
+        print raw_body_to_html(args['test'])
+    else:
+        pub = args['output'] == 'publish'
+        opts = {
+            'css_in': conf.CSS_INPUT_DIR,
+            'css_out': conf.CSS_INPUT_DIR,
+            'js_in': conf.JS_INPUT_DIR,
+            'js_in': conf.JS_INPUT_DIR,
+            'post_in': conf.POST_INPUT_DIR if pub else conf.DRAFT_INPUT_DIR,
+            'site_out': conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR,
+            'template': '/projects/site/templates/base.html',
+        }        
+        main(opts)
+        print 'done'

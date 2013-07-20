@@ -3,6 +3,7 @@ import cgi
 from functools import partial
 from itertools import takewhile
 
+from html import urlize
 from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
 from miscutils import logger
 
@@ -31,6 +32,24 @@ def xotd(xotd_post):
     # remove empty lines at beginning and end of each chunk
 
     title, posts = chunks[0], chunks[1:]
+
+
+def inline_tag_thing(raw_body):
+    """ find inline tags, replace with internal links, return tags """
+
+    tags = []
+
+    def replace(matched):
+        """ Take matched, mutate tag list, return as link markup """
+
+        matched_str = matched.groups()[0]
+        tags.append(matched_str)
+        return '"{0}"->{1}'.format(matched_str, urlize(matched_str))
+
+
+    raw_body = wrap_match('\|').sub(replace, raw_body)
+
+    return raw_body, tags
 
 
 # refactor/rewrite
@@ -188,7 +207,6 @@ def wrap_match(match):
             re.VERBOSE)
 
 
-# todo |inline tags|
 def inline_markup_to_html(astr):
     """ Convert inline markup to html e.g. *bold text* -> <b>bold text</b> """
 

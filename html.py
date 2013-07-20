@@ -1,7 +1,6 @@
 import os, re
 from functools import partial
 
-import markup, metadata
 from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
 from miscutils import logger
 
@@ -37,3 +36,8 @@ def data_to_html_page(template, static_filenames, post_data):
                 'metadata': post_data['metadata_html'],
                 'toc': post_data['toc'],
                 })
+
+
+def urlize(astr):
+    """ Turn string into slug suitable to be url """
+    return astr.replace(' ', '_')
