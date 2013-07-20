@@ -62,10 +62,3 @@
         addEvent(showDay, 'click', day);
     };
 })();
-
-
-// TOC
-// get all h2 & h3s
-//document.querySelectorAll("h2, h3");
-// show h2s, and only show h3s if you are look at the h2 section?
-// unless only h2s, in which case show all

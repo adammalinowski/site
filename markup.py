@@ -217,6 +217,11 @@ def chunk_type_wrap(chunk_type, chunk):
     return '<%s>%s</%s>' % (chunk_type, '<br>'.join(chunk), chunk_type)
 
 
+def hname(chunk):
+    """ Find name of chunk for internal anchor link """
+    #todo, remove non letters etc
+    return ''.join(chunk).replace(' ', '').lower()
+
 
 def typed_chunk_to_html(typed_chunk):
     """ Convert a typed chunk to html """
@@ -232,8 +237,8 @@ def typed_chunk_to_html(typed_chunk):
 
     if chunk_type in ['h2', 'h3']:
         # todo assert lenght = 1
-        name = ''.join(chunk).replace(' ', '').lower()
-        chunk[0] = '<a href="#{0}">{1}</a>'.format(name, chunk[0])
+        name = hname(chunk)
+        chunk[0] = link('#' + name, chunk[0])
         return '<a name="{0}"></a>{1}'.format(name, wrap(chunk))
 
     if chunk_type == 'pre':
@@ -246,10 +251,57 @@ def typed_chunk_to_html(typed_chunk):
     return wrap(chunk)
 
 
-""" Convert post in custom markup to html """
-to_html = lcompose([
+def typed_chunks_to_toc_list(typed_chunks):
+    #print typed_chunks
+    return [(t, c[0]) for t, c in typed_chunks if t in ['h2', 'h3']]
+
+
+def link(href, text):
+    return '<a href="{0}">{1}</a>'.format(href, text)
+
+
+def anchor_link(chunk):
+    return link('#' + hname(chunk), chunk)
+
+
+def list_to_ul(alist):
+    if not alist:
+        return ''
+    return '<ul>{0}</ul>'.format('\n'.join('<li>{0}</li>'.format(li)
+                                 for li in alist))
+
+
+def toc_list_to_toc(toc_chunks):
+
+    # find if is only h3's
+    if all(t == 'h3' for t, c in toc_chunks):
+        return list_to_ul(anchor_link(chunk) for t, chunk in toc_chunks)
+    else:
+        # first make list of h2 with optional child list
+        # wait should html be nested list also?!
+        nested_lis = []
+        for chunk_type, chunk in toc_chunks:
+            if chunk_type == 'h2':
+                nested_lis.append((chunk, []))
+            elif chunk_type == 'h3':
+                nested_lis[-1][1].append(chunk)
+        # then make html
+        inner_lists = [(outer, list_to_ul(map(anchor_link, lis)))
+                       for outer, lis in nested_lis]
+        outer_lists = [list_to_ul(anchor_link(outer) + '\n' + html_inner)
+                       for outer, html_inner in inner_lists]
+        return '\n'.join(outer_lists)
+
+
+""" Convert post in custom markup to typed chunks """
+post_to_typed_chunks = lcompose([
     post_to_chunks,
-    fmap(chunk_to_typed_chunk),
+    fmap(chunk_to_typed_chunk)
+    ])
+
+
+""" Convert typed chunks to html page """
+typed_chunks_to_html_page = lcompose([
     fmap(typed_chunk_to_html),
     partial('\n'.join),
     ])

@@ -3,6 +3,7 @@ html {
     background-color: #FAF9F9;
     color: #222;
     line-height: 1.4em;
+    font-size: 17px;
 }
 
 a { text-decoration: none; }
@@ -15,7 +16,8 @@ h3 { font-size: 1.07em; margin: 1.4em 0 .9em 0; letter-spacing: .01em; }  /* min
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
-h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited {
+h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
+#toc a:link, #toc  a:hover, #toc  a:focus, #toc a:visited {
     color: #222;
     text-decoration: none;
 }
@@ -29,14 +31,30 @@ hr { margin: 2em auto; width: 66%; }
 
 p, pre { margin: .8em 0; }
 
-#col {
+#centercol {
     margin: 0 auto;
     max-width: 700px;
-    padding: 0 2em;
+    padding: 0 25px;
+}
+
+#toc {
+    display: none;
+}
+/* for screen to be large enough needs to be center col + toc width */
+@media only screen and (min-width: 1180px) {
+    /* centered, then margin-left'd to correct position */
+    #toc {
+        display: inline;
+        left: 50%;
+        font-size: .7em;
+        position: fixed;
+        margin-left: -580px;
+        top: 1.5em;
+        width: 210px;
+    }
 }
 
 #body {
-    font-size: 17px;
     padding-top: 1em;
 }
 

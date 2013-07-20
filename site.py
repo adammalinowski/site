@@ -11,7 +11,7 @@ import markup
 import metadata
 
 # package utils
-from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap
+from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap, pipe
 
 
 """ Get filename of posts for conversion """
@@ -28,7 +28,10 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     source_output_filename = filename.replace(' ', '_')
     post_output_filename = source_output_filename[:-4]  # remove mandatory .txt,
     title, raw_body, raw_metadata = html.split_post_metadata(post_str)
-    body_html = markup.to_html(raw_body)
+    typed_chunks = markup.post_to_typed_chunks(raw_body)
+    toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
+    # wtf mutate?!?!?!
+    body_html = markup.typed_chunks_to_html_page(typed_chunks)
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
     metadata_data['source'] = output_dir + source_output_filename
     metadata_html = metadata.datadict_to_html(metadata_data)
@@ -38,6 +41,7 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
         'metadata': metadata_data,
         'title': title,
         'filename': post_output_filename,
+        'toc': markup.toc_list_to_toc(toc_list),
         }
     post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + post_output_filename, post_html)
@@ -54,9 +58,11 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
         '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
         for post_data in sorted_post_data)
     post_data = {
-        'body_html': markup.to_html(homepage_post_str),
+        'body_html': pipe(homepage_post_str, [markup.post_to_typed_chunks,
+                                              markup.typed_chunks_to_html_page]),
         'metadata_html': "",
         'title': "Home",
+        'toc': "",
     }
     post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + 'home', post_html)

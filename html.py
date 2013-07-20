@@ -35,5 +35,5 @@ def data_to_html_page(template, static_filenames, post_data):
                 'page_title': post_data['title'],
                 'body': post_data['body_html'],
                 'metadata': post_data['metadata_html'],
+                'toc': post_data['toc'],
                 })
-

@@ -11,9 +11,9 @@ general:
   - for now can stick to relative links...
 - warnings:
   - trailing char after link e.g. http:example.com,
-- internal anchors for paragraphs?
 - javascript dynamic TOC?
 - description field
+- internal anchors for paragraphs?
 
 markup:
 - fix lists (allow line immediately before list)
