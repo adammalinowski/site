@@ -34,7 +34,6 @@ def xotd(xotd_post):
 
 
 # refactor/rewrite
-@log
 def post_to_chunks(post):
     """ Split a post into lists of lines, broken by empty lines
 
@@ -152,7 +151,8 @@ def convert_markup_links(astr):
     """
     return re.sub(r"""
                   "([^"]*)"     # match link text
-                  ->([^\ ]*)    # match link url
+                  ->([^| ]*)    # match link url, any chars other than  space or |
+                  \|?           # optional | at the end ignored
                   """,
                   r'<a href="\2">\1</a>',
                   astr,
@@ -163,7 +163,8 @@ def convert_raw_links(astr):
     """ Convert raw urls to html links """
     return re.sub(r"""
                   (?=(?<![^ ])http)  # starting http, not preceeded by non-space
-                  ([^ ]*)            # match all non-space chars
+                  ([^| ]*)           # match all non-space chars other than |
+                  \|?                # optional | at the end ignored
                   """,
                   r'<a href="\1">\1</a>',
                   astr,
@@ -188,9 +189,6 @@ def wrap_match(match):
 
 
 # todo |inline tags|
-# todo |inline tags|,, having a comma at the end of a bit of markup
-# or some other way to have commas after link damnit
-# and even like an apostrophe after a link. hmmmmm
 def inline_markup_to_html(astr):
     """ Convert inline markup to html e.g. *bold text* -> <b>bold text</b> """
 
