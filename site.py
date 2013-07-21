@@ -39,9 +39,12 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     title, raw_body, raw_metadata = html.split_post_metadata(post_str)
     raw_body, tags = markup.inline_tag_thing(raw_body)
     typed_chunks = markup.post_to_typed_chunks(raw_body)
-    toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
-    # todo wtf mutate?!?!?!
     body_html = markup.typed_chunks_to_html_page(typed_chunks)
+    toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
+    if toc_list:
+        toc_html = 'Contents:\n' +  markup.toc_list_to_toc(toc_list)
+    else:
+        toc_html = ''
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
     metadata_data['source'] = output_dir + source_output_filename
     metadata_html = metadata.datadict_to_html(metadata_data)
@@ -51,7 +54,7 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
         'metadata': metadata_data,
         'title': title,
         'filename': post_output_filename,
-        'toc': 'Contents:\n' + markup.toc_list_to_toc(toc_list),
+        'toc': toc_html,
         }
     post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + post_output_filename, post_html)
@@ -64,12 +67,14 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
 
     sorted_post_data = sorted(post_datas, reverse=True,
                               key=lambda pd: pd['metadata']['date'])
-    homepage_post_str = '\n'.join(
+    homepage_post_str = "All posts, most recent first:\n\n"
+    homepage_post_str += '\n'.join(
         '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
         for post_data in sorted_post_data)
+    body_html = pipe(homepage_post_str, [markup.post_to_typed_chunks,
+                                              markup.typed_chunks_to_html_page])
     post_data = {
-        'body_html': pipe(homepage_post_str, [markup.post_to_typed_chunks,
-                                              markup.typed_chunks_to_html_page]),
+        'body_html': body_html,
         'metadata_html': "",
         'title': "Home",
         'toc': "",

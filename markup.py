@@ -233,12 +233,6 @@ def chunk_type_wrap(chunk_type, chunk):
     return '<%s>%s</%s>' % (chunk_type, '<br>'.join(chunk), chunk_type)
 
 
-def hname(chunk):
-    """ Find name of chunk for internal anchor link """
-    #todo, remove non letters etc
-    return ''.join(chunk).replace(' ', '').lower()
-
-
 def typed_chunk_to_html(typed_chunk):
     """ Convert a typed chunk to html """
 
@@ -252,10 +246,11 @@ def typed_chunk_to_html(typed_chunk):
         return pipe(chunk, [parse_list_chunk, parsed_list_to_html, '\n'.join])
 
     if chunk_type in ['h2', 'h3']:
-        # todo assert lenght = 1
-        name = hname(chunk)
-        chunk[0] = link('#' + name, chunk[0])
-        return '<a name="{0}"></a>{1}'.format(name, wrap(chunk))
+        assert len(chunk) == 1, "Header has multiple lines"
+        header = chunk[0]
+        name = urlize(header)
+        header_link = link('#' + name, header)
+        return '<a name="{0}"></a>{1}'.format(name, wrap([header_link]))
 
     if chunk_type == 'pre':
         # no inline markup, but do html escape
@@ -268,7 +263,6 @@ def typed_chunk_to_html(typed_chunk):
 
 
 def typed_chunks_to_toc_list(typed_chunks):
-    #print typed_chunks
     return [(t, c[0]) for t, c in typed_chunks if t in ['h2', 'h3']]
 
 
@@ -277,7 +271,7 @@ def link(href, text):
 
 
 def anchor_link(chunk):
-    return link('#' + hname(chunk), chunk)
+    return link('#' + urlize(chunk), chunk)
 
 
 def list_to_ul(alist):

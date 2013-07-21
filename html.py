@@ -40,4 +40,4 @@ def data_to_html_page(template, static_filenames, post_data):
 
 def urlize(astr):
     """ Turn string into slug suitable to be url """
-    return astr.replace(' ', '_')
+    return astr.replace(' ', '_').lower()

@@ -2,7 +2,7 @@ Todo
 
 
 general:
-- improve style (links, metadata, footer, title...)
+- refactor everything
 - handling for un-publishing? also version/overwrite/removal handling
 - xotd (or not?!)
 - make thing to handle errors in drafts, and output something useful at least
@@ -11,9 +11,14 @@ general:
   - for now can stick to relative links...
 - warnings:
   - trailing char after link e.g. http:example.com,
-- javascript dynamic TOC?
 - description field
 - internal anchors for paragraphs?
+
+style:
+- make footer links bold when visited. sort out darkstyle :visited issue
+- fix h3 toc
+- fix toc in chrome css
+- improve style (links, footer)
 
 markup:
 - inline tags (different class)
@@ -22,3 +27,9 @@ markup:
 - quotes (inner & block)
 - optional line breaking?
 - commas (& other) after links
+
+general thinking:
+- notes somehow distinct? is anything not notes?
+- blog posts seem different to notes. you want them ordered by date created.
+  for notes date created is not that important, since the idea is for the file
+  to be somewhat timeless and continually updated

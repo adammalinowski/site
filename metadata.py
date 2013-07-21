@@ -47,13 +47,13 @@ def datadict_to_html(metadata_data):
     html_list = []
 
     assert 'date' in metadata_data, 'Missing date'
-    date_html = '<span id="date">%s</span>' % metadata_data['date']
+    date_html = '<span>%s</span>' % metadata_data['date']
     html_list.append(date_html)
 
-    source_html = '<a href="%s" id="source">source</a>' % metadata_data['source']
+    source_html = '<span><a href="%s">source</a></span>' % metadata_data['source']
     html_list.append(source_html)
 
-    return ''.join(html_list)
+    return ' '.join(html_list)
 
 
 raw_metadata_to_datadict = lcompose([

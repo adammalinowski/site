@@ -1,7 +1,7 @@
 /* night theme overriding primary site css */
 html {
     background-color: #1F1C1A;
-    color: #CCC;
+    color: #DDD;
 }
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
@@ -16,4 +16,6 @@ a:link { color: #77AABB; }
 /*a:focus { color: #006699;}*/
 a:visited { color: #BB88BB; }
 
-code,kbd,pre,samp { background-color: #282828; }
+#footer a:visited { color: #BB88BB; }
+
+code,kbd,pre,samp { background-color: #303030; }

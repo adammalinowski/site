@@ -6,7 +6,7 @@ html, button, input, select, textarea {
 html {
     background-color: #FAF9F9;
     color: #222;
-    line-height: 1.5em;
+    line-height: 1.6em;
     font-size: 17px;
 }
 
@@ -34,7 +34,7 @@ li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
 p, pre { margin: .8em 0; }
-code,kbd,pre,samp { background-color: #EEE; font-size: .9em; }
+code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
 
 #centercol {
     margin: 0 auto;
@@ -54,7 +54,7 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .9em; }
         font-size: .75em;
         position: fixed;
         margin-left: -630px;
-        top: 1.5em;
+        top: 3em;
         width: 210px;
     }
 }
@@ -69,13 +69,22 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .9em; }
 }
 
 #metadata {
-    border-top: 1px solid #CCC;
     font-size: .85em;
     margin-top: 1.5em;
     padding-top: 1.5em;
 }
 
-#footer {
-    font-size: .8em;
-    margin-bottom: 400px;
+#metadata span {
+    margin-right: .6em;
 }
+
+#footer {
+    border-top: 1px solid #CCC;
+    font-size: .9em;
+    margin-bottom: 400px;
+    margin-top: 3em;
+    padding-top: 3em;
+}
+
+#footer a { margin-right: .6em; }
+#footer a:visited { color: blue; }
