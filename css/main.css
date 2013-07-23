@@ -7,7 +7,7 @@ html {
     background-color: #FAF9F9;
     color: #222;
     line-height: 1.6em;
-    font-size: 17px;
+    font-size: 18px;
 }
 
 a { text-decoration: none; }
@@ -39,14 +39,13 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
 #centercol {
     margin: 0 auto;
     max-width: 700px;
-    padding: 0 25px;
 }
 
 #toc {
     display: none;
 }
 /* for screen to be large enough needs to be center col + toc width */
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1280px) {
     /* centered, then margin-left'd to correct position */
     #toc {
         display: inline;
@@ -69,7 +68,7 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
 }
 
 #metadata {
-    font-size: .85em;
+    font-size: .87em;
     margin-top: 1.5em;
     padding-top: 1.5em;
 }

@@ -158,7 +158,7 @@ def get_args():
     """
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--verbosity",
+    parser.add_argument("--verbosity",
                         type=int,
                         choices=[0, 1, 2],
                         default=0,
@@ -185,7 +185,6 @@ if __name__ == "__main__":
     """ Use command line args and config to do the business """
 
     args = get_args()
-    #print args
     #configure_logging(args['verbosity'])
     if args.get('test'):
         print raw_body_to_html(args['test'])

@@ -3,6 +3,8 @@ Todo
 
 general:
 - refactor everything
+- fix verbosity argparser issue
+- command line test, more options
 - handling for un-publishing? also version/overwrite/removal handling
 - xotd (or not?!)
 - make thing to handle errors in drafts, and output something useful at least
@@ -17,7 +19,7 @@ general:
 style:
 - make footer links bold when visited. sort out darkstyle :visited issue
 - fix h3 toc
-- fix toc in chrome css
+- figure out ff browser width confusion (1660???)
 - improve style (links, footer)
 
 markup:
