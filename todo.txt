@@ -1,6 +1,11 @@
 Todo
 
 
+write some posts!!!
+- disclaimer
+- contact
+- some other stuff
+
 general:
 - refactor everything
 - fix verbosity argparser issue
@@ -11,20 +16,20 @@ general:
 - testing!
 - fix links so they work both locally and as html site
   - for now can stick to relative links...
-- warnings:
-  - trailing char after link e.g. http:example.com,
+- warnings
 - description field
 - internal anchors for paragraphs?
+- rss/atom
 
 style:
-- make footer links bold when visited. sort out darkstyle :visited issue
+- make footer links not links when you are on that page. sort out darkstyle :visited issue
 - fix h3 toc
 - figure out ff browser width confusion (1660???)
 - improve style (links, footer)
 
 markup:
 - inline tags (different class)
-- internal links (semi-auto and explicit)
+- internal links (semi-auto and explicit, plus different class)
 - fix lists (allow line immediately before list)
 - quotes (inner & block)
 - optional line breaking?
@@ -35,3 +40,11 @@ general thinking:
 - blog posts seem different to notes. you want them ordered by date created.
   for notes date created is not that important, since the idea is for the file
   to be somewhat timeless and continually updated
+
+deployment
+- figure domain
+- figure hosting (s3 probably)
+- static assets on cloudfront?
+- deploying changes script
+- email
+
