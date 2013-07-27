@@ -1,31 +1,36 @@
 Todo
 
 
+meta:
+- prepare for live
+
+
 write some posts!!!
-- disclaimer
 - contact
+- disclaimer
 - some other stuff
 
 general:
+- make thing to handle errors in drafts, and output something useful at least
+- fix links so they work both locally and as html site
+  - for now can stick to relative links...
+- handling for un-publishing? also version/overwrite/removal handling
 - refactor everything
 - fix verbosity argparser issue
 - command line test, more options
-- handling for un-publishing? also version/overwrite/removal handling
 - xotd (or not?!)
-- make thing to handle errors in drafts, and output something useful at least
 - testing!
-- fix links so they work both locally and as html site
-  - for now can stick to relative links...
 - warnings
 - description field
 - internal anchors for paragraphs?
 - rss/atom
+- make 404
 
 style:
 - make footer links not links when you are on that page. sort out darkstyle :visited issue
 - fix h3 toc
-- figure out ff browser width confusion (1660???)
 - improve style (links, footer)
+- figure out ff browser width confusion (1660???)
 
 markup:
 - inline tags (different class)
@@ -42,9 +47,10 @@ general thinking:
   to be somewhat timeless and continually updated
 
 deployment
-- figure domain
-- figure hosting (s3 probably)
-- static assets on cloudfront?
+- set mime type and other meta header things
 - deploying changes script
 - email
 
+misc
+- favicon
+- / and home.html?

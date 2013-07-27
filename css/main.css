@@ -5,7 +5,7 @@ html, button, input, select, textarea {
 
 html {
     background-color: #FAF9F9;
-    color: #222;
+    color: #444;
     line-height: 1.6em;
     font-size: 18px;
 }
@@ -14,7 +14,7 @@ a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 h1 { font-size: 1.5em; margin: 1em 0 .7 0; }  /* page title */
-h2 { font-size: 1.28em; margin: 1.5em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
+h2 { font-size: 1.37em; margin: 1.5em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
 h3 { font-size: 1.15em; margin: 1.5em 0 .8em 0; letter-spacing: .01em; }  /* minor section */
 
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
@@ -22,7 +22,7 @@ h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
 h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
 #toc a:link, #toc  a:hover, #toc  a:focus, #toc a:visited {
-    color: #222;
+    color: #444;
     text-decoration: none;
 }
 

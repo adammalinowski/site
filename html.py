@@ -30,7 +30,7 @@ def data_to_html_page(template, static_filenames, post_data):
                 'css_filename': static_filenames['primary_css'],
                 'dark_css_filename': static_filenames['dark_css'],
                 'javascript': static_filenames['js'],
-                'site_name': 'Site Name',
+                'site_name': 'adammalinowski.co.uk',
                 'page_title': post_data['title'],
                 'body': post_data['body_html'],
                 'metadata': post_data['metadata_html'],

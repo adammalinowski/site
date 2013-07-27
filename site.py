@@ -3,6 +3,8 @@ import argparse
 import logging
 from functools import partial
 
+import simples3
+
 # package stuff
 import conf
 import assets
@@ -35,7 +37,7 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
 
     post_str = file_to_str(input_dir + filename)
     source_output_filename = html.urlize(filename)
-    post_output_filename = source_output_filename[:-4]  # remove mandatory .txt,
+    post_output_filename = source_output_filename[:-4] + '.html' # .txt -> .html
     title, raw_body, raw_metadata = html.split_post_metadata(post_str)
     raw_body, tags = markup.inline_tag_thing(raw_body)
     typed_chunks = markup.post_to_typed_chunks(raw_body)
@@ -46,7 +48,7 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     else:
         toc_html = ''
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
-    metadata_data['source'] = output_dir + source_output_filename
+    metadata_data['source'] = source_output_filename
     metadata_html = metadata.datadict_to_html(metadata_data)
     post_data = {
         'body_html': body_html,
@@ -62,6 +64,15 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     return post_data
 
 
+def simple_post_data(body_html, title):
+    return {
+        'title': title,
+        'body_html': body_html,
+        'metadata_html': "",
+        'toc': "",
+    }
+
+
 def make_homepage(output_dir, post_data_to_html_page, post_datas):
     """ Make the homepage as list of links to other pages """
 
@@ -72,15 +83,15 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
         '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
         for post_data in sorted_post_data)
     body_html = pipe(homepage_post_str, [markup.post_to_typed_chunks,
-                                              markup.typed_chunks_to_html_page])
-    post_data = {
-        'body_html': body_html,
-        'metadata_html': "",
-        'title': "Home",
-        'toc': "",
-    }
+                                         markup.typed_chunks_to_html_page])
+    post_html = post_data_to_html_page(simple_post_data(body_html, 'Home'))
+    str_to_file(output_dir + 'home.html', post_html)
+
+
+def make_404(output_dir, post_data_to_html_page):
+    post_data = simple_post_data('Feel free to have a look around though.', '404 Error - File not found')
     post_html = post_data_to_html_page(post_data)
-    str_to_file(output_dir + 'home', post_html)
+    str_to_file(output_dir + '404.html', post_html)
 
 
 def main(opts):
@@ -94,6 +105,7 @@ def main(opts):
                       (opts['post_in'], opts['site_out'], post_data_to_html_page),
                       post_filenames(opts['post_in']))
     make_homepage(opts['site_out'], post_data_to_html_page, post_datas)
+    make_404(opts['site_out'], post_data_to_html_page)
 
 
 def make_static_assets(opts):
@@ -167,11 +179,12 @@ def get_args():
 
     # make the output sub-command parser
     parser_output = subparsers.add_parser('output',
-                            help="output either publish posts or draft posts")
+                        help="output either publish posts or draft posts")
     parser_output.add_argument('output',
-                               choices=['publish', 'draft'],
-                               default='publish',
-                               help="coose 'publish' or 'draft' posts to output")
+                   choices=['publish', 'draft', 'upload'],
+                   default='publish',
+                   help="choose 'publish' or 'draft' posts to output locally "
+                        "or upload to upload to live web site")
 
     # make the test post sub-command parser
     parser_test = subparsers.add_parser('test', help='tranform test input as raw body to html')
@@ -179,6 +192,53 @@ def get_args():
                              help="input test input")
 
     return vars(parser.parse_args())
+
+
+def init_s3():
+    access_key = os.environ['S3_ACCESS_KEY_ID']
+    secret_key = os.environ['S3_SECRET_ACCESS_KEY']
+    bucket_name = 'adammalinowski.co.uk'
+    base_url = 'https://' + bucket_name + '.s3.amazonaws.com'
+    s3 = simples3.S3Bucket(bucket_name,
+                           access_key=access_key,
+                           secret_key=secret_key,
+                           base_url=base_url)
+    return s3
+
+
+def extension(filename):
+    splitfilename = filename.split('.')
+    return splitfilename[-1] if len(splitfilename) > 1 else 'html'
+
+
+def filename_to_mimetype(filename):
+    extension_to_mimetype = {
+        'txt': 'text/plain',
+        'html': 'text/html',
+        'css': 'text/css',
+        'js': 'text/javascript',
+        }
+    return extension_to_mimetype[extension(filename)]
+
+
+def filename_to_headers(filename):
+    no_cache = {'Cache-Control': 'private, max-age=0'}
+    long_cache = {'Cache-Control': 'public, max-age=31449600'}
+    extension_to_headers = {
+        'txt': no_cache,
+        'html': no_cache,
+        'css': long_cache,
+        'js': long_cache,
+        }
+    return extension_to_headers[extension(filename)]
+
+
+def upload(site_dir):
+    s3 = init_s3()
+    for filename in os.listdir(site_dir):
+        s3.put(filename, file_to_str(site_dir + filename),
+               mimetype=filename_to_mimetype(filename),
+               headers=filename_to_headers(filename))
 
 
 if __name__ == "__main__":
@@ -189,15 +249,19 @@ if __name__ == "__main__":
     if args.get('test'):
         print raw_body_to_html(args['test'])
     else:
-        pub = args['output'] == 'publish'
+        pub = args['output'] in ['publish', 'upload']
+        site_dir = conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR
         opts = {
             'css_in': conf.CSS_INPUT_DIR,
             'css_out': conf.CSS_INPUT_DIR,
             'js_in': conf.JS_INPUT_DIR,
             'js_in': conf.JS_INPUT_DIR,
             'post_in': conf.POST_INPUT_DIR if pub else conf.DRAFT_INPUT_DIR,
-            'site_out': conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR,
+            'site_out': site_dir,
             'template': '/projects/site/templates/base.html',
         }
         main(opts)
-        print 'done'
+        print 'output done'
+        if args['output'] == 'upload':
+            upload(site_dir)
+            print 'upload done'
