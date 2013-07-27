@@ -298,9 +298,8 @@ def toc_list_to_toc(toc_chunks):
         # then make html
         inner_lists = [(outer, list_to_ul(map(anchor_link, lis)))
                        for outer, lis in nested_lis]
-        outer_lists = [list_to_ul(anchor_link(outer) + '\n' + html_inner)
-                       for outer, html_inner in inner_lists]
-        return '\n'.join(outer_lists)
+        return list_to_ul([anchor_link(outer) + '\n' + html_inner
+                           for outer, html_inner in inner_lists])
 
 
 """ Convert post in custom markup to typed chunks """
