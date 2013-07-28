@@ -17,21 +17,15 @@
 
     var show = function(elem) { elem.style.display = 'inline'; }
     var hide = function(elem) { elem.style.display = 'none'; }
-
     var dayNightContainer = document.getElementById("dayNight");
     var dayOn = document.getElementById("dayOn");;
     var nightOn = document.getElementById("nightOn");
     var dayOff = document.getElementById("dayOff");
     var nightOff = document.getElementById("nightOff");
-    var darkFilename = dayNightContainer.getAttribute('data-darkname');
+    var nightTag = document.getElementsByTagName("link")[1];
 
     var night = function(e) {
-        var ss = document.createElement("link");
-        ss.type = "text/css";
-        ss.rel = "stylesheet";
-        ss.href = darkFilename;
-        ss.id = "darkstyle";
-        document.getElementsByTagName("head")[0].appendChild(ss);
+        nightTag.disabled = false;
         show(nightOn);
         show(showDay);
         hide(dayOn);
@@ -41,8 +35,7 @@
     };
 
     var day = function(e) {
-        var darkstyle = document.getElementById("darkstyle");
-        if (darkstyle) { darkstyle.parentNode.removeChild(darkstyle); };
+        nightTag.disabled = true;
         show(dayOn);
         show(showNight);
         hide(showDay);
@@ -57,7 +50,11 @@
         if (state === null || (state != 'day' && state != 'night')) {
             state = 'day';
         };
-        if (state == 'day') { day(); } else { night(); };
+        if (state == 'day') {
+            day();
+        } else {
+            night();
+        };
         addEvent(showNight, 'click', night);
         addEvent(showDay, 'click', day);
     };

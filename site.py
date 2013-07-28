@@ -85,7 +85,7 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
     body_html = pipe(homepage_post_str, [markup.post_to_typed_chunks,
                                          markup.typed_chunks_to_html_page])
     post_html = post_data_to_html_page(simple_post_data(body_html, 'Home'))
-    str_to_file(output_dir + 'home.html', post_html)
+    str_to_file(output_dir + 'index.html', post_html)
 
 
 def make_404(output_dir, post_data_to_html_page):

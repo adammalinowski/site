@@ -21,7 +21,6 @@ general:
 - description field
 - internal anchors for paragraphs?
 - rss/atom
-- make 404
 
 
 style:
