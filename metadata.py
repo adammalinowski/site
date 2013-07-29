@@ -1,7 +1,7 @@
 import re
 import datetime
 
-from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter
+from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter, args
 from miscutils import logger
 
 log = logger()
@@ -21,13 +21,13 @@ raw_metadata_to_raw_dict = lcompose([
     ])
 
 
-def date_str_to_date(date_str):
-    """ Take a date string like 13/6/13 or 2013/06/13, return date object """
-
-    date_bits = date_str.strip().split('/')
-    if len(date_bits[0]) == 2:  # include the missing 20- in year
-        date_bits[0] = '20' + date_bits[0]
-    return datetime.date(*map(int, date_bits))
+""" Take a date string like 2013/06/13, return date object """
+date_str_to_date = lcompose([
+    atr('strip'),
+    atr('split', '/'),
+    fmap(int),
+    args(datetime.date)
+    ])
 
 
 def raw_dict_to_datadict(metadata):

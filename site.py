@@ -34,13 +34,16 @@ def raw_body_to_html(raw_body):
     return body_html
 
 
-def make_page(input_dir, output_dir, post_data_to_html_page, filename):
+def make_page(opts, post_data_to_html_page, filename):
     """ Take in dir & filename, make & output HTML. Return post data"""
 
+    input_dir, output_dir = opts['post_in'], opts['site_out']
     post_str = file_to_str(input_dir + filename)
-    source_output_filename = html.urlize(filename)
-    post_output_filename = source_output_filename[:-4] + '.html' # .txt -> .html
-    title, raw_body, raw_metadata = html.split_post_metadata(post_str)
+    url_filename = html.urlize(filename[:-4])  # remove .txt, make url
+    post_output_filename = url_filename + '.html'
+    source_output_filename = url_filename + '.txt'
+    title, raw_body, raw_metadata = html.split_post_metadata(post_str,
+                                         require_metadata=opts['publish'])
     raw_body, tags = markup.inline_tag_thing(raw_body)
     typed_chunks = markup.post_to_typed_chunks(raw_body)
     body_html = markup.typed_chunks_to_html_page(typed_chunks)
@@ -66,9 +69,9 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     return post_data
 
 
-def try_make_page(input_dir, output_dir, post_data_to_html_page, filename):
+def try_make_page(opts, post_data_to_html_page, filename):
     try:
-        return make_page(input_dir, output_dir, post_data_to_html_page, filename)
+        return make_page(opts, post_data_to_html_page, filename)
     except Exception, e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print 'Make page failed for {0} with {1}'.format(filename, e)
@@ -117,10 +120,9 @@ def main(opts):
         make_page_func = make_page
     else:
         make_page_func = try_make_page
-    post_datas = pmap(make_page,
-                      (opts['post_in'], opts['site_out'], post_data_to_html_page),
+    post_datas = pmap(make_page_func, (opts, post_data_to_html_page),
                       post_filenames(opts['post_in']))
-    post_datas = filter(None, post_datas)
+    post_datas = filter(None, post_datas)  # because try_make_page may return None
     make_homepage(opts['site_out'], post_data_to_html_page, post_datas)
     make_404(opts['site_out'], post_data_to_html_page)
 

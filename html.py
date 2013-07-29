@@ -7,15 +7,18 @@ from miscutils import logger
 log = logger()
 
 
-def split_post_metadata(raw_post):
+def split_post_metadata(raw_post, require_metadata=False):
     """ Take raw post text, return title, raw post and raw metadata """
 
     title, _, rest = raw_post.partition('\n')
     result = re.split(r'~{3,}', rest)
-    assert len(result) == 2, 'Invalid markup'
+    if len(result) == 1 and not require_metadata:
+        result.append('Date: 1999/12/31')  # make fake metadata
+    assert len(result) == 2, 'Invalid metadata markup'
     return (title, result[0], result[1])
 
 
+""" Get template file, remove unnecessary spaces """
 clean_template = lcompose([
     file_to_str,
     atr('split', '\n'),
@@ -38,6 +41,9 @@ def data_to_html_page(template, static_filenames, post_data):
                 })
 
 
-def urlize(astr):
-    """ Turn string into slug suitable to be url """
-    return astr.replace(' ', '_').lower()
+""" Turn string into slug suitable to be url """
+urlize = lcompose([
+    atr('replace', ' ', '_'),
+    atr('lower'),
+    partial(re.sub, *(r'[^\w-]', '',))
+    ])

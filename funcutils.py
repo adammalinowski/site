@@ -34,7 +34,11 @@ def lcompose(func_list, log=False):
 
 
 def rcompose(func_list, **kwargs):
-    """ Take multiple 1-arg funcs, return func which applies RTL """
+    """ Take multiple 1-arg funcs, return func which applies RTL
+
+    rcompose([a, b, c])(x) == lambda x: a(b(c(x)))
+
+    """
     return lcompose(reversed(func_list), **kwargs)
 
 
@@ -67,3 +71,8 @@ def ffilter(func):
 def pmap(func, fix_args, seq):
     """ Map a partially applied function """
     return map(partial(func, *fix_args), seq)
+
+
+def args(func):
+    """ Take a func, return func which applies list of args to original func """
+    return lambda arg_list: func(*arg_list)

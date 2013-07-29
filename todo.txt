@@ -9,7 +9,7 @@ write some posts!!!
 
 general:
 - improve draft error handling
-  - handle no-metadata error and output if otherwise ok
+  - handle no-metadata error and output if otherwise ok (e.g. fake date)
   - make amount of detail output for failed drafts controllable with command line
 - fix links so they work both locally and as html site
   - for now can stick to relative links...
@@ -37,7 +37,6 @@ markup:
 - fix lists (allow line immediately before list)
 - quotes (inner & block)
 - optional line breaking?
-- commas (& other) after links
 
 
 general thinking:
@@ -47,12 +46,6 @@ general thinking:
   to be somewhat timeless and continually updated
 
 
-deployment
-- set mime type and other meta header things
-- deploying changes script
-- email
-
-
 misc
-- favicon
-- / and home.html?
+- favicon?
+- email
