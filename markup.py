@@ -52,7 +52,6 @@ def inline_tag_thing(raw_body):
     return raw_body, tags
 
 
-# refactor/rewrite
 def post_to_chunks(post):
     """ Split a post into lists of lines, broken by empty lines
 

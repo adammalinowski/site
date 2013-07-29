@@ -32,9 +32,17 @@ style:
 
 
 markup:
+- lists
+	- don't give ul/ol's a margin because nested lists look rubbish. but then adjacent lists aren't seperated.
+	  but then why would you ever want adjacent lists?!
+	- allow line immediately before list? trick would be to just not wrap it in p, somehow. but don't want to have
+	  to mess with source text to achieve this. so only way would be to have special handling in parser...
 - inline tags (different class)
 - internal links (semi-auto and explicit, plus different class)
-- fix lists (allow line immediately before list)
+	- want to be able to neatly
+		- link within a document
+		- link to other docs on same site
+	- want internal link to possibly look different (i.e. have a different class)
 - quotes (inner & block)
 - optional line breaking?
 

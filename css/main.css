@@ -27,9 +27,9 @@ h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
 }
 
 
-ul { margin: .8em 0; padding: 0 0 0 1em; }
+ul { margin: 0; padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
-ol { margin: .8em 0; padding: 0 0 0 1.4em; }
+ol { margin: 0; padding: 0 0 0 1.4em; }
 li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
