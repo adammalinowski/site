@@ -1,6 +1,8 @@
 import os
 import argparse
 import logging
+import sys
+import traceback
 from functools import partial
 
 import simples3
@@ -33,7 +35,7 @@ def raw_body_to_html(raw_body):
 
 
 def make_page(input_dir, output_dir, post_data_to_html_page, filename):
-    """ Take in dir & filename, make html & output. Return post data"""
+    """ Take in dir & filename, make & output HTML. Return post data"""
 
     post_str = file_to_str(input_dir + filename)
     source_output_filename = html.urlize(filename)
@@ -62,6 +64,16 @@ def make_page(input_dir, output_dir, post_data_to_html_page, filename):
     str_to_file(output_dir + post_output_filename, post_html)
     str_to_file(output_dir + source_output_filename, post_str)
     return post_data
+
+
+def try_make_page(input_dir, output_dir, post_data_to_html_page, filename):
+    try:
+        return make_page(input_dir, output_dir, post_data_to_html_page, filename)
+    except Exception, e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print 'Make page failed for {0} with {1}'.format(filename, e)
+        traceback.print_exc()
+        print '\n'
 
 
 def simple_post_data(body_html, title):
@@ -101,9 +113,14 @@ def main(opts):
     template = html.clean_template(opts['template'])
     post_data_to_html_page = partial(html.data_to_html_page,
                                      *(template, static_filenames))
+    if opts['publish']:
+        make_page_func = make_page
+    else:
+        make_page_func = try_make_page
     post_datas = pmap(make_page,
                       (opts['post_in'], opts['site_out'], post_data_to_html_page),
                       post_filenames(opts['post_in']))
+    post_datas = filter(None, post_datas)
     make_homepage(opts['site_out'], post_data_to_html_page, post_datas)
     make_404(opts['site_out'], post_data_to_html_page)
 
@@ -252,6 +269,7 @@ if __name__ == "__main__":
         pub = args['output'] in ['publish', 'upload']
         site_dir = conf.PUBLISH_OUTPUT_DIR if pub else conf.DRAFT_OUTPUT_DIR
         opts = {
+            'publish': pub,
             'css_in': conf.CSS_INPUT_DIR,
             'css_out': conf.CSS_INPUT_DIR,
             'js_in': conf.JS_INPUT_DIR,

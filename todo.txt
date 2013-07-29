@@ -8,7 +8,9 @@ write some posts!!!
 
 
 general:
-- make thing to handle errors in drafts, and output something useful at least
+- improve draft error handling
+  - handle no-metadata error and output if otherwise ok
+  - make amount of detail output for failed drafts controllable with command line
 - fix links so they work both locally and as html site
   - for now can stick to relative links...
 - handling for un-publishing? also version/overwrite/removal handling
