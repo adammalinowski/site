@@ -2,7 +2,7 @@ import re
 import datetime
 
 from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter, args
-from miscutils import logger
+from miscutils import logger, nice_date
 
 log = logger()
 
@@ -47,10 +47,10 @@ def datadict_to_html(metadata_data):
     html_list = []
 
     assert 'date' in metadata_data, 'Missing date'
-    date_html = '<span>%s</span>' % metadata_data['date']
+    date_html = '<span id="date">%s</span>' % nice_date(metadata_data['date'])
     html_list.append(date_html)
 
-    source_html = '<span><a href="%s">source</a></span>' % metadata_data['source']
+    source_html = '<span id="source"><a href="%s">source</a></span>' % metadata_data['source']
     html_list.append(source_html)
 
     return ' '.join(html_list)

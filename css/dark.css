@@ -1,14 +1,14 @@
 /* night theme overriding primary site css */
 html {
     background-color: #191715;
-    color: #D5D5D5;
+    color: #CCC;
 }
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
 h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
 #toc a:link, #toc  a:hover, #toc  a:focus, #toc a:visited {
-    color: #CCC;
+    color: #C5C5C5;
 }
 
 a:link { color: #77AABB; }
@@ -19,3 +19,5 @@ a:visited { color: #BB88BB; }
 #footer a:visited { color: #BB88BB; }
 
 code,kbd,pre,samp { background-color: #303030; }
+
+#metadata { color: #BBB; }

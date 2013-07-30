@@ -32,6 +32,7 @@ style:
 
 
 markup:
+- allow empty lines in code blocks!!!!
 - lists
 	- don't give ul/ol's a margin because nested lists look rubbish. but then adjacent lists aren't seperated.
 	  but then why would you ever want adjacent lists?!

@@ -59,9 +59,7 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
     }
 }
 
-#body {
-    padding-top: 1em;
-}
+#content { padding-top: 1em; }
 
 #day, #night {
     float: right;
@@ -69,14 +67,15 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
 }
 
 #metadata {
+    color: #555;
     font-size: .87em;
     margin-top: 1.5em;
     padding-top: 1.5em;
 }
 
-#metadata span {
-    margin-right: .6em;
-}
+#metadata span { margin-right: .6em; }
+
+#source { float: right ;}
 
 #footer {
     border-top: 1px solid #CCC;

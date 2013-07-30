@@ -41,3 +41,12 @@ def num_to_base(anint, alphabet):
 def num_to_base36(anint):
     alphabet = string.ascii_lowercase + string.digits
     return num_to_base(anint, alphabet)
+
+
+def nice_date(dt):
+    def suffix(day):
+        if 4 <= day <= 20 or 24 <= day <= 30:
+            return "th"
+        else:
+            return ["st", "nd", "rd"][(day % 10) - 1]
+    return dt.strftime('%d{S} %B, %Y'.replace('{S}', suffix(dt.day)))
