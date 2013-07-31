@@ -8,8 +8,8 @@ write some posts!!!
 
 
 general:
+- how to handle versioning, date updating (when changing a file).
 - improve draft error handling
-  - handle no-metadata error and output if otherwise ok (e.g. fake date)
   - make amount of detail output for failed drafts controllable with command line
 - fix links so they work both locally and as html site
   - for now can stick to relative links...
