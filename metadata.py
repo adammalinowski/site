@@ -1,5 +1,6 @@
 import re
 import datetime
+import string
 
 from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter, args
 from miscutils import logger, nice_date
@@ -35,7 +36,7 @@ def raw_dict_to_datadict(metadata):
 
     metadata_funcs = {
         'date': date_str_to_date,
-        'tags': lambda tag_str: tag_str.split(',')
+        'category': lcompose([string.strip, string.lower]),
         }
     return dict((k, metadata_funcs[k](v)) for k, v in metadata.items()
                 if k in metadata_funcs)
@@ -45,6 +46,8 @@ def datadict_to_html(metadata_data):
     """ Convert metadata data to html """
 
     html_list = []
+
+    assert 'category' in metadata_data, 'Missing category'
 
     assert 'date' in metadata_data, 'Missing date'
     date_html = '<span id="date">%s</span>' % nice_date(metadata_data['date'])

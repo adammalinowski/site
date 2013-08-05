@@ -38,6 +38,8 @@ def data_to_html_page(template, static_filenames, post_data):
                 'body': post_data['body_html'],
                 'metadata': post_data['metadata_html'],
                 'toc': post_data['toc'],
+                'footer': '<a href="/" class="home">adammalinowski.co.uk</a>'\
+                          if post_data.get('footer') else ''
                 })
 
 

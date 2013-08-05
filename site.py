@@ -15,7 +15,7 @@ import markup
 import metadata
 
 # package utils
-from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap, pipe
+from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap, pipe, seq_to_group_dict
 
 
 """ Get filename of posts for conversion """
@@ -49,7 +49,7 @@ def make_page(opts, post_data_to_html_page, filename):
     body_html = markup.typed_chunks_to_html_page(typed_chunks)
     toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
     if toc_list:
-        toc_html = 'Contents:\n' +  markup.toc_list_to_toc(toc_list)
+        toc_html = 'Page contents:\n' +  markup.toc_list_to_toc(toc_list)
     else:
         toc_html = ''
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
@@ -62,6 +62,7 @@ def make_page(opts, post_data_to_html_page, filename):
         'title': title,
         'filename': post_output_filename,
         'toc': toc_html,
+        'footer': True,
         }
     post_html = post_data_to_html_page(post_data)
     str_to_file(output_dir + post_output_filename, post_html)
@@ -79,13 +80,21 @@ def try_make_page(opts, post_data_to_html_page, filename):
         print '\n'
 
 
-def simple_post_data(body_html, title):
-    return {
+def simple_post_data(body_html, title, **kwargs):
+    data = {
         'title': title,
         'body_html': body_html,
         'metadata_html': "",
         'toc': "",
+        'footer': True
     }
+    data.update(kwargs)
+    return data
+
+
+def page_list(post_datas):
+    return '\n'.join(markup.link(post_data['filename'], post_data['title'])
+                     for post_data in post_datas)
 
 
 def make_homepage(output_dir, post_data_to_html_page, post_datas):
@@ -93,13 +102,17 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
 
     sorted_post_data = sorted(post_datas, reverse=True,
                               key=lambda pd: pd['metadata']['date'])
-    homepage_post_str = "All posts, most recent first:\n\n"
-    homepage_post_str += '\n'.join(
-        '<a href="{0}">{1}</a>'.format(post_data['filename'], post_data['title'])
-        for post_data in sorted_post_data)
+    category_post_data = seq_to_group_dict(sorted_post_data,
+                                          lambda pd: pd['metadata']['category'])
+    homepage_post_str = ''
+    for category in ['posts', 'notes']:
+        post_datas = category_post_data[category]
+        homepage_post_str += '<h3>' + category.title() + '</h3>' + page_list(post_datas)
     body_html = pipe(homepage_post_str, [markup.post_to_typed_chunks,
                                          markup.typed_chunks_to_html_page])
-    post_html = post_data_to_html_page(simple_post_data(body_html, 'Home'))
+    post_html = post_data_to_html_page(simple_post_data(body_html,
+                                                        'adammalinowski.co.uk',
+                                                        footer=False))
     str_to_file(output_dir + 'index.html', post_html)
 
 

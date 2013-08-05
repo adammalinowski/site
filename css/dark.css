@@ -16,7 +16,9 @@ a:link { color: #77AABB; }
 /*a:focus { color: #006699;}*/
 a:visited { color: #BB88BB; }
 
-#footer a:visited { color: #BB88BB; }
+a.home:link, a.home:hover, a.home:focus, a.home:visited { color: #D0D0D0; }
+
+#footer a:visited { color: #D0D0D0; }
 
 code,kbd,pre,samp { background-color: #303030; }
 

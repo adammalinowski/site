@@ -76,3 +76,13 @@ def pmap(func, fix_args, seq):
 def args(func):
     """ Take a func, return func which applies list of args to original func """
     return lambda arg_list: func(*arg_list)
+
+
+def seq_to_group_dict(seq, func):
+    group_dict = {}
+    for item in seq:
+        key = func(item)
+        if key not in group_dict:
+            group_dict[key] = []
+        group_dict[key].append(item)
+    return group_dict

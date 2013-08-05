@@ -49,4 +49,7 @@ def nice_date(dt):
             return "th"
         else:
             return ["st", "nd", "rd"][(day % 10) - 1]
-    return dt.strftime('%d{S} %B, %Y'.replace('{S}', suffix(dt.day)))
+    niceish = dt.strftime('%d{S} %B, %Y'.replace('{S}', suffix(dt.day)))
+    if niceish.startswith('0'):
+        return niceish[1:]
+    return niceish

@@ -13,6 +13,11 @@ html {
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+a.home:link, a.home:hover, a.home:focus, a.home:visited {
+    font-size: 90%;
+    color: #383838;
+}
+
 h1 { font-size: 1.5em; margin: 1em 0 .7 0; }  /* page title */
 h2 { font-size: 1.37em; margin: 1.4em 0 .8em 0; letter-spacing: .01em; }  /* major section (rare) */
 h3 { font-size: 1.15em; margin: 1.4em 0 .8em 0; letter-spacing: .01em; }  /* minor section */
@@ -26,7 +31,6 @@ h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
     text-decoration: none;
 }
 
-
 ul { margin: 0; padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
 ol { margin: 0; padding: 0 0 0 1.4em; }
@@ -34,7 +38,7 @@ li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
 
 p, pre { margin: .8em 0; }
-code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
+code,kbd,pre,samp { background-color: #EEE; font-size: .95em; padding: .1em .2em ; }
 
 #centercol {
     padding: 1em;
@@ -53,8 +57,8 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
         left: 50%;
         font-size: .75em;
         position: fixed;
-        margin-left: -610px;
-        top: 3em;
+        margin-left: 420px;
+        top: 4em;
         width: 210px;
     }
 }
@@ -78,11 +82,10 @@ code,kbd,pre,samp { background-color: #EEE; font-size: .95em; }
 #source { float: right ;}
 
 #footer {
-    border-top: 1px solid #CCC;
     font-size: .9em;
-    margin-bottom: 400px;
-    margin-top: 3em;
+    margin: 10em 0 20em 0;
     padding-top: 3em;
+    text-align: center;
 }
 
 #footer a { margin-right: .6em; }
