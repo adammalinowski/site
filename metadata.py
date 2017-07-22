@@ -3,7 +3,7 @@ import datetime
 import string
 
 from funcutils import file_to_str, str_to_file, lcompose, atr, fmap, ffilter, args
-from miscutils import logger, nice_date
+from miscutils import logger
 
 log = logger()
 
@@ -42,23 +42,7 @@ def raw_dict_to_datadict(metadata):
                 if k in metadata_funcs)
 
 
-def datadict_to_html(metadata_data):
-    """ Convert metadata data to html """
-
-    html_list = []
-
-    assert 'category' in metadata_data, 'Missing category'
-
-    assert 'date' in metadata_data, 'Missing date'
-    date_html = '<span id="date">%s</span>' % nice_date(metadata_data['date'])
-    html_list.append(date_html)
-
-    source_html = '<span id="source"><a href="%s">source</a></span>' % metadata_data['source']
-    html_list.append(source_html)
-
-    return ' '.join(html_list)
-
-
 raw_metadata_to_datadict = lcompose([
     raw_metadata_to_raw_dict,
-    raw_dict_to_datadict])
+    raw_dict_to_datadict
+    ])

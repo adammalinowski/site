@@ -2,32 +2,30 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>{page_title} | {site_name}</title>
+    <title>{page_title} </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{css_filename}">
-    <link rel="stylesheet" href="{dark_css_filename}" disabled="true">
-    <!-- see /html.html -->
+    <meta name="darkcss" content="{dark_css_filename}" id="darkcss">
 </head>
 <body>
-    <div id="dayNight" style="display: none; float: right; margin: 1em;">
-        <b id="dayOn">day</b><a href="#" id="showDay">day</a>
-        <b id="nightOn">night</b><a href="#" id="showNight">night</a>
-    </div>
-    <div id="toc">
-        {toc}
-    </div>
     <div id="centercol">
+        <div id="header">
+            <span id="dayNight">
+                <a href="#" id="showDay">🌣</a>
+                <a href="#" id="showNight">🌙</a>                
+            </span>
+            <a href="/">adammalinowski.co.uk</a>
+        </div>
         <div id="content">
             <h1>{page_title}</h1>
-            {body}
-        </div>
-        <div id="metadata">
-            {metadata}
+            <div id="metadata">{date}</div>
+            <div id="body">{body}</div>
         </div>
         <div id="footer">
-            {footer}
+            <a href="/">Adam Malinowski</a>
+            <br>
+            <a href="mailto:blog@adammalinowski.co.uk">blog@adammalinowski.co.uk</a>
         </div>
     </div>
-    <script src="{javascript}"></script>
-<!-- https://github.com/adammalinowski/site.git -->
+    <script src="{javascript_filename}"></script>

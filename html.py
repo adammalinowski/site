@@ -18,29 +18,30 @@ def split_post_metadata(raw_post, require_metadata=False):
     return (title, result[0], result[1])
 
 
-""" Get template file, remove unnecessary spaces """
-clean_template = lcompose([
-    file_to_str,
-    atr('split', '\n'),
-    fmap(atr('strip')),
-    '\n'.join,
+def clean_file(path):
+    """ Take filepath, remove unnecessary spaces """
+
+    composed = lcompose([
+        file_to_str,
+        atr('split', '\n'),
+        fmap(atr('strip')),
+        '\n'.join,
     ])
+    return composed(path)
 
 
 def data_to_html_page(template, static_filenames, post_data):
     """ Put it all together into HTML page """
-    return template.format(**{
-                'css_filename': static_filenames['primary_css'],
-                'dark_css_filename': static_filenames['dark_css'],
-                'javascript': static_filenames['js'],
-                'site_name': 'adammalinowski.co.uk',
-                'page_title': post_data['title'],
-                'body': post_data['body_html'],
-                'metadata': post_data['metadata_html'],
-                'toc': post_data['toc'],
-                'footer': '<a href="/" class="home">adammalinowski.co.uk</a>'\
-                          if post_data.get('footer') else ''
-                })
+    
+    return template.format(
+        css_filename=static_filenames['primary_css'],
+        dark_css_filename=static_filenames['dark_css'],
+        javascript_filename=static_filenames['js'],
+        site_name='adammalinowski.co.uk',
+        page_title=post_data['title'],
+        body=post_data['body_html'],
+        date=post_data['date'],
+    )
 
 
 """ Turn string into slug suitable to be url """

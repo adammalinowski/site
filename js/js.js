@@ -1,6 +1,14 @@
 // onload?
 // preventdefault?
 (function() {
+    // add dark stylesheet with js on init
+    var nightSheet = document.createElement('link')
+    nightSheet.type = 'text/css'
+    nightSheet.rel = 'stylesheet'
+    nightSheet.href = document.getElementById("darkcss").content;
+    document.head.appendChild(nightSheet)
+    nightSheet.disabled = true  // has to be done after inserting the element
+
     var addEvent = function(elem, name, func) {
         elem.addEventListener ? elem.addEventListener(name, func) : elem.attachEvent(name, func);
     }
@@ -20,26 +28,19 @@
     var dayNightContainer = document.getElementById("dayNight");
     var dayOn = document.getElementById("dayOn");;
     var nightOn = document.getElementById("nightOn");
-    var dayOff = document.getElementById("dayOff");
-    var nightOff = document.getElementById("nightOff");
-    var nightTag = document.getElementsByTagName("link")[1];
 
     var night = function(e) {
-        nightTag.disabled = false;
-        show(nightOn);
+        nightSheet.disabled = false;        
         show(showDay);
-        hide(dayOn);
         hide(showNight);
         localStorage.setItem('dayOrNight', 'night');
         if (e) { e.preventDefault() };
     };
 
     var day = function(e) {
-        nightTag.disabled = true;
-        show(dayOn);
+        nightSheet.disabled = true;        
         show(showNight);
         hide(showDay);
-        hide(nightOn);
         localStorage.setItem('dayOrNight', 'day');
         if (e) { e.preventDefault() };
     };

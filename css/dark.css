@@ -1,25 +1,35 @@
 /* night theme overriding primary site css */
 html {
-    background-color: #191715;
-    color: #D0D0D0;
+    background-color: #0C0C0C;
+    color: #F3F3F3;
 }
+
+/* heading links */
+#header a:link, #header a:hover, #header a:focus, #header a:visited,
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
-h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited,
-#toc a:link, #toc  a:hover, #toc  a:focus, #toc a:visited {
+h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited
+{
     color: #C5C5C5;
 }
 
 a:link { color: #77AABB; }
-/*a:hover { font-weight: bold;}*/
-/*a:focus { color: #006699;}*/
 a:visited { color: #BB88BB; }
 
-a.home:link, a.home:hover, a.home:focus, a.home:visited { color: #D0D0D0; }
+/*a.home:link, a.home:hover, a.home:focus, a.home:visited { color: #D0D0D0; }*/
 
-#footer a:visited { color: #D0D0D0; }
+#footer {
+	color: #AAA;
+}
+#footer a:visited { 
+	color: #D0D0D0; 
+}
 
-code,kbd,pre,samp { background-color: #303030; }
+code,kbd,pre,samp { 
+	background-color: #303030; 
+}
 
-#metadata { color: #BBB; }
+#metadata { 
+	color: #BBB; 
+}

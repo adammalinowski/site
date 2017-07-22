@@ -26,9 +26,9 @@ def lcompose(func_list, log=False):
     """
     def composed(arg):
         for func in func_list:
-            if log: print 'doing %s with' % func.__name__, arg
+            if log: print('doing %s with' % func.__name__, arg)
             arg = func(arg)
-            if log: print 'result', arg
+            if log: print('result', arg)
         return arg
     return composed
 
@@ -69,7 +69,7 @@ def ffilter(func):
 
 
 def pmap(func, fix_args, seq):
-    """ Map a partially applied function """
+    """ Partially apply a function then map it over sequence """
     return map(partial(func, *fix_args), seq)
 
 
