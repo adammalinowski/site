@@ -4,7 +4,7 @@ from functools import partial
 from itertools import takewhile
 
 from html import urlize
-from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
+import funcutils as fu
 from miscutils import logger
 
 log = logger()
@@ -28,10 +28,6 @@ def xotd(xotd_post):
         ---
 
     """
-    chunks = otd_post.split('---')
-    # remove empty lines at beginning and end of each chunk
-
-    title, posts = chunks[0], chunks[1:]
 
 
 def inline_tag_thing(raw_body):
@@ -40,15 +36,13 @@ def inline_tag_thing(raw_body):
     tags = []
 
     def replace(matched):
-        """ Take matched, mutate closed-over tag list, return as link markup """
+        """ Take matched, mutate closed-over tag list, return link markup """
 
         matched_str = matched.groups()[0]
         tags.append(matched_str)
         return '"{0}"->{1}'.format(matched_str, urlize(matched_str))
 
-
     raw_body = wrap_match('\|').sub(replace, raw_body)
-
     return raw_body, tags
 
 
@@ -82,9 +76,9 @@ def chunk_to_typed_chunk(chunk):
       -> ('pre', ["10 PRINT 'bumface'", "20 GOTO 10"])
 
     """
-    schunk = map(atr('strip'), chunk)
+    schunk = list(map(fu.atr('strip'), chunk))
     if len(chunk) == 1:
-        if schunk[0].startswith('---'):  #todo also check no non-dash chars?
+        if schunk[0].startswith('---'):  # todo also check no non-dash chars?
             return ('hr', [])
 
     if schunk[-1].startswith('-----'):
@@ -167,26 +161,30 @@ def convert_markup_links(astr):
     Note, link url must have space after, no commas or nuthin.
 
     """
-    return re.sub(r"""
-                  "([^"]*)"     # match link text
-                  ->([^| ]*)    # match link url, any chars other than  space or |
-                  \|?           # optional | at the end ignored
-                  """,
-                  r'<a href="\2">\1</a>',
-                  astr,
-                  flags=re.VERBOSE)
+    return re.sub(
+        r"""
+            "([^"]*)"     # match link text
+            ->([^| ]*)    # match link url, any chars other than  space or |
+            \|?           # optional | at the end ignored
+        """,
+        r'<a href="\2">\1</a>',
+        astr,
+        flags=re.VERBOSE,
+    )
 
 
 def convert_raw_links(astr):
     """ Convert raw urls to html links """
-    return re.sub(r"""
-                  (?=(?<![^ ])http)  # starting http, not preceeded by non-space
-                  ([^| ]*)           # match all non-space chars other than |
-                  \|?                # optional | at the end ignored
-                  """,
-                  r'<a href="\1">\1</a>',
-                  astr,
-                  flags=re.VERBOSE)
+    return re.sub(
+        r"""
+            (?=(?<![^ ])http)  # starting http, not preceeded by non-space
+            ([^| ]*)           # match all non-space chars other than |
+            \|?                # optional | at the end ignored
+        """,
+        r'<a href="\1">\1</a>',
+        astr,
+        flags=re.VERBOSE,
+    )
 
 
 def wrap_match(match):
@@ -196,14 +194,15 @@ def wrap_match(match):
 
     """
     return re.compile(
-            r"""
+        r"""
             (?<![^\ ])%s(?!\ )  # char not preceeded by non-space,
                                 # not followed by space
             (.+?)               # the surrounded text as a group
             (?<!\ )%s           # the match char not preceeded by space,
             (?![\w])            # not followed by alphanumeric
-            """ % (match, match),
-            re.VERBOSE)
+        """ % (match, match),
+        flags=re.VERBOSE,
+    )
 
 
 def inline_markup_to_html(astr):
@@ -224,7 +223,7 @@ def inline_markup_to_html(astr):
     for match, opener, closer in markup_to_elem:
         astr = wrap_match(match).sub(replace, astr)
 
-    return pipe(astr, [convert_markup_links, convert_raw_links])
+    return fu.pipe(astr, [convert_markup_links, convert_raw_links])
 
 
 def chunk_type_wrap(chunk_type, chunk):
@@ -242,7 +241,10 @@ def typed_chunk_to_html(typed_chunk):
         return '<hr>'
 
     if chunk_type == 'l':
-        return pipe(chunk, [parse_list_chunk, parsed_list_to_html, '\n'.join])
+        return fu.pipe(
+            chunk,
+            [parse_list_chunk, parsed_list_to_html, '\n'.join],
+        )
 
     if chunk_type in ['h2', 'h3']:
         assert len(chunk) == 1, "Header has multiple lines"
@@ -302,14 +304,14 @@ def toc_list_to_toc(toc_chunks):
 
 
 """ Convert post in custom markup to typed chunks """
-post_to_typed_chunks = lcompose([
+post_to_typed_chunks = fu.lcompose([
     post_to_chunks,
-    fmap(chunk_to_typed_chunk)
-    ])
+    fu.fmap(chunk_to_typed_chunk)
+])
 
 
 """ Convert typed chunks to html page """
-typed_chunks_to_html_page = lcompose([
-    fmap(typed_chunk_to_html),
+typed_chunks_to_html_page = fu.lcompose([
+    fu.fmap(typed_chunk_to_html),
     partial('\n'.join),
-    ])
+])

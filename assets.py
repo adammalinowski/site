@@ -1,10 +1,9 @@
 """ Read and manipulate CSS files """
 
 import os
-from operator import add
 from functools import partial
 
-from funcutils import file_to_str, str_to_file, lcompose, fmap, ffilter, atr, pipe
+import funcutils as fu
 from miscutils import logger, num_to_base36
 
 log = logger()
@@ -21,19 +20,19 @@ combine = '\n'.join
 
 
 """ Combine & minify all .css files in supplied dir """
-combine_css = lcompose([
+combine_css = fu.lcompose([
     partial(get_path_files_with_ext, '.css'),
-    fmap(file_to_str),
+    fu.fmap(fu.file_to_str),
     combine,
-    ])
+])
 
 
 """ Combine all .js files in supplied dir """
-get_js = lcompose([
+get_js = fu.lcompose([
     partial(get_path_files_with_ext, '.js'),
-    fmap(file_to_str),
+    fu.fmap(fu.file_to_str),
     combine,
-    ])
+])
 
 
 def remove_extention(extension, path):
@@ -42,4 +41,4 @@ def remove_extention(extension, path):
 
 
 """ Make a nice short readable str (mostly) uniquely representing a str """
-get_cachebusting_name = lcompose([hash, abs, num_to_base36])
+get_cachebusting_name = fu.lcompose([hash, abs, num_to_base36])

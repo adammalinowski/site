@@ -15,7 +15,9 @@ def logger():
         @wraps(func)
         def wrapper(*args, **kwargs):
             actual_logger.info('doing %s' % func.__name__)
-            actual_logger.debug('with args: %s and kwargs: %s' % ( args, kwargs))
+            actual_logger.debug(
+                'with args: %s and kwargs: %s' % (args, kwargs)
+            )
             result = func(*args, **kwargs)
             actual_logger.debug('\nresult: %s' % result)
             return result

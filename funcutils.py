@@ -26,9 +26,11 @@ def lcompose(func_list, log=False):
     """
     def composed(arg):
         for func in func_list:
-            if log: print('doing %s with' % func.__name__, arg)
+            if log:
+                print('doing %s with' % func.__name__, arg)
             arg = func(arg)
-            if log: print('result', arg)
+            if log:
+                print('result', arg)
         return arg
     return composed
 
@@ -74,11 +76,13 @@ def pmap(func, fix_args, seq):
 
 
 def args(func):
-    """ Take a func, return func which applies list of args to original func """
+    """ Take func, return func which applies list of args to original func """
     return lambda arg_list: func(*arg_list)
 
 
 def seq_to_group_dict(seq, func):
+    """ Make a dict of lists from seq, using func to find key on each item """
+
     group_dict = {}
     for item in seq:
         key = func(item)

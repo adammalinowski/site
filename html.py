@@ -1,7 +1,7 @@
-import os, re
+import re
 from functools import partial
 
-from funcutils import file_to_str, str_to_file, pipe, atr, fmap, ffilter, lcompose
+import funcutils as fu
 from miscutils import logger
 
 log = logger()
@@ -21,10 +21,10 @@ def split_post_metadata(raw_post, require_metadata=False):
 def clean_file(path):
     """ Take filepath, remove unnecessary spaces """
 
-    composed = lcompose([
-        file_to_str,
-        atr('split', '\n'),
-        fmap(atr('strip')),
+    composed = fu.lcompose([
+        fu.file_to_str,
+        fu.atr('split', '\n'),
+        fu.fmap(fu.atr('strip')),
         '\n'.join,
     ])
     return composed(path)
@@ -32,7 +32,7 @@ def clean_file(path):
 
 def data_to_html_page(template, static_filenames, post_data):
     """ Put it all together into HTML page """
-    
+
     return template.format(
         css_filename=static_filenames['primary_css'],
         dark_css_filename=static_filenames['dark_css'],
@@ -45,8 +45,8 @@ def data_to_html_page(template, static_filenames, post_data):
 
 
 """ Turn string into slug suitable to be url """
-urlize = lcompose([
-    atr('replace', ' ', '_'),
-    atr('lower'),
+urlize = fu.lcompose([
+    fu.atr('replace', ' ', '_'),
+    fu.atr('lower'),
     partial(re.sub, *(r'[^\w-]', '',))
-    ])
+])

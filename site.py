@@ -6,7 +6,8 @@ import sys
 import traceback
 from functools import partial
 
-# import tinys3
+from boto import s3
+from boto.s3.connection import OrdinaryCallingFormat
 
 # package stuff
 import conf
@@ -16,16 +17,16 @@ import markup
 import metadata
 
 # package utils
-from funcutils import file_to_str, str_to_file, lcompose, ffilter, atr, pmap, pipe, seq_to_group_dict
+import funcutils as fu
 from miscutils import nice_date
 
 
 def get_post_filenames(post_source_dir):
     """ Get filenames of posts for conversion """
 
-    composed = lcompose([
+    composed = fu.lcompose([
         os.listdir,
-        ffilter(atr('endswith', '.txt')),
+        fu.ffilter(fu.atr('endswith', '.txt')),
     ])
     return composed(post_source_dir)
 
@@ -43,7 +44,7 @@ def make_page(opts, post_data_to_html_page, filename):
     """ Take in dir & filename, make & output HTML. Return post data"""
 
     input_dir, output_dir = opts['post_source_dir'], opts['out_dir']
-    post_str = file_to_str(input_dir + filename)
+    post_str = fu.file_to_str(input_dir + filename)
     url_filename = html.urlize(filename[:-4])  # remove .txt, make url
     post_output_filename = url_filename + '.html'
     source_output_filename = url_filename + '.txt'
@@ -56,7 +57,7 @@ def make_page(opts, post_data_to_html_page, filename):
     body_html = markup.typed_chunks_to_html_page(typed_chunks)
     toc_list = markup.typed_chunks_to_toc_list(typed_chunks)
     if toc_list:
-        toc_html = 'Page contents:\n' +  markup.toc_list_to_toc(toc_list)
+        toc_html = 'Page contents:\n' + markup.toc_list_to_toc(toc_list)
     else:
         toc_html = ''
     metadata_data = metadata.raw_metadata_to_datadict(raw_metadata)
@@ -69,10 +70,10 @@ def make_page(opts, post_data_to_html_page, filename):
         'filename': post_output_filename,
         'toc': toc_html,
         'footer': True,
-        }
+    }
     post_html = post_data_to_html_page(post_data)
-    str_to_file(output_dir + post_output_filename, post_html)
-    str_to_file(output_dir + source_output_filename, post_str)
+    fu.str_to_file(output_dir + post_output_filename, post_html)
+    fu.str_to_file(output_dir + source_output_filename, post_str)
     return post_data
 
 
@@ -93,7 +94,7 @@ def simple_post_data(body_html, title, **kwargs):
         'metadata_html': "",
         'toc': "",
         'footer': True,
-        'date': None,
+        'date': '',
     }
     data.update(kwargs)
     return data
@@ -102,7 +103,7 @@ def simple_post_data(body_html, title, **kwargs):
 def page_list(post_datas):
     return '\n'.join(
         markup.link(
-            post_data['filename'], 
+            post_data['filename'],
             post_data['title'],
         )
         for post_data in post_datas
@@ -113,40 +114,41 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
     """ Make the homepage as list of links to other pages """
 
     sorted_post_data = sorted(
-        post_datas, 
+        post_datas,
         reverse=True,
         key=lambda pd: pd['metadata']['date'],
     )
-    category_post_data = seq_to_group_dict(
+    category_post_data = fu.seq_to_group_dict(
         sorted_post_data,
         lambda pd: pd['metadata']['category'],
     )
     homepage_post_str = ''
-    for category in ['posts', 'notes']:
+    for category in ['posts', 'ideas', 'notes']:
         post_datas = category_post_data[category]
-        homepage_post_str += '<h3>' + category.title() + '</h3>' + page_list(post_datas)
-    
-    body_html = pipe(
-        homepage_post_str, 
+        homepage_post_str += (
+            '<h3>' + category.title() + '</h3>' + page_list(post_datas)
+        )
+
+    body_html = fu.pipe(
+        homepage_post_str,
         [markup.post_to_typed_chunks, markup.typed_chunks_to_html_page],
     )
     post_html = post_data_to_html_page(
         simple_post_data(
             body_html,
-            'adammalinowski.co.uk',
-            footer=False,
+            '',
         )
     )
-    str_to_file(output_dir + 'index.html', post_html)
+    fu.str_to_file(output_dir + 'index.html', post_html)
 
 
 def make_404(output_dir, post_data_to_html_page):
     post_data = simple_post_data(
-        'Feel free to have a look around though.', 
+        'Feel free to have a look around though.',
         '404 Error - File not found',
     )
     post_html = post_data_to_html_page(post_data)
-    str_to_file(output_dir + '404.html', post_html)
+    fu.str_to_file(output_dir + '404.html', post_html)
 
 
 def make_site(opts):
@@ -177,11 +179,11 @@ def make_static_assets(opts):
     """ Make cachebusted css & js files, return dict of filenames """
 
     css_filename, dark_css_filename = do_css(
-        opts['css_source_dir'], 
+        opts['css_source_dir'],
         opts['out_dir'],
     )
     js_filename = do_js(
-        opts['js_source_dir'], 
+        opts['js_source_dir'],
         opts['out_dir'],
     )
     return {
@@ -199,13 +201,13 @@ def do_css(css_input_dir, css_output_dir):
     css_name = assets.get_cachebusting_name(css_str) + '.css'
 
     # dark css
-    dark_css_str = file_to_str(css_input_dir + 'dark.css')
+    dark_css_str = fu.file_to_str(css_input_dir + 'dark.css')
     dark_css_name = assets.get_cachebusting_name(dark_css_str) + '.css'
 
     # remove and write
     assets.remove_extention('.css', css_output_dir)
-    str_to_file(css_output_dir + css_name, css_str)
-    str_to_file(css_output_dir + dark_css_name, dark_css_str)
+    fu.str_to_file(css_output_dir + css_name, css_str)
+    fu.str_to_file(css_output_dir + dark_css_name, dark_css_str)
 
     return css_name, dark_css_name
 
@@ -216,7 +218,7 @@ def do_js(js_input_dir, js_output_dir):
     assets.remove_extention('.js', js_output_dir)
     js_str = assets.get_js(js_input_dir)
     js_name = assets.get_cachebusting_name(js_str) + '.js'
-    str_to_file(js_output_dir + js_name, js_str)
+    fu.str_to_file(js_output_dir + js_name, js_str)
     return js_name
 
 
@@ -265,7 +267,7 @@ def get_args():
 
     # make the test post sub-command parser
     parser_test = subparsers.add_parser(
-        'test', 
+        'test',
         help='tranform test input as raw body to html',
     )
     parser_test.add_argument(
@@ -276,24 +278,14 @@ def get_args():
     return vars(parser.parse_args())
 
 
-def init_s3():
-    access_key = os.environ['S3_ACCESS_KEY_ID']
-    secret_key = os.environ['S3_SECRET_ACCESS_KEY']
-    bucket_name = 'adammalinowski.co.uk'
-    # base_url = 'https://' + bucket_name + '.s3.amazonaws.com'
-    conn = tinys3.Connection(
-        access_key=access_key,
-        secret_key=secret_key,
-        default_bucket=bucket_name,
-        tls=True, 
+def get_s3_bucket():
+    conn = s3.connect_to_region(
+        'eu-west-2',
+        aws_access_key_id=os.environ['S3_ACCESS_KEY_ID'],
+        aws_secret_access_key=os.environ['S3_SECRET_ACCESS_KEY'],
+        is_secure=True,
     )
-
-    s3 = S3Bucket(
-        bucket_name,
-        
-        base_url=base_url,
-    )
-    return s3
+    return conn.get_bucket('adammalinowski')
 
 
 def extension(filename):
@@ -307,7 +299,7 @@ def filename_to_mimetype(filename):
         'html': 'text/html',
         'css': 'text/css',
         'js': 'text/javascript',
-        }
+    }
     return extension_to_mimetype[extension(filename)]
 
 
@@ -324,31 +316,34 @@ def filename_to_headers(filename):
 
 
 def upload(out_dir):
-    s3 = init_s3()
-    for filename in os.listdir(out_dir):
-        s3.upload(
-            filename, 
-            file_to_str(out_dir + filename),
-            content_type=filename_to_mimetype(filename),
-            headers=filename_to_headers(filename),
+    bucket = get_s3_bucket()
+    for file_name in os.listdir(out_dir):
+        file_path = out_dir + file_name
+        content_type = filename_to_mimetype(file_name)
+        key = s3.key.Key(bucket)
+        key.key = file_name
+        key.content_type = content_type
+        headers = filename_to_headers(file_name)
+        print('putting', file_name)
+        key.set_contents_from_filename(
+            file_path,
+            headers=headers,
         )
+        key.make_public()
 
 
-
-def main():
-    """ Use command line args and config to do the business """
-
+def get_options():
     args = get_args()
     # configure_logging(args['verbosity'])
 
     if args.get('test'):
         print(raw_body_to_html(args['test']))
         return
-    
+
     publish = args['output'] in ['publish', 'upload']  # draft if false
     out_dir = conf.PUBLISH_OUTPUT_DIR if publish else conf.DRAFT_OUTPUT_DIR
     post_source_dir = conf.POST_INPUT_DIR if publish else conf.DRAFT_INPUT_DIR
-    opts = {
+    options = {
         'publish': publish,
         'css_source_dir': conf.CSS_INPUT_DIR,
         'css_out': conf.CSS_INPUT_DIR,
@@ -356,16 +351,22 @@ def main():
         'post_source_dir': post_source_dir,
         'out_dir': out_dir,
         'template': conf.PROJECT_ROOT + '/templates/base.html',
+        'upload': args['output'] == 'upload',
     }
-    
-    make_site(opts)
+    return options
+
+
+def main():
+    """ Use command line args and config to do the business """
+
+    options = get_options()
+    make_site(options)
     print('output done ' + datetime.datetime.now().strftime('%H:%M:%S'))
-    
-    if args['output'] == 'upload':
-        upload(out_dir)
+
+    if options['upload']:
+        upload(options['out_dir'])
         print('upload done')
 
 
 if __name__ == "__main__":
     main()
-

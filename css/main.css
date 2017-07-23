@@ -18,6 +18,9 @@ html {
     padding: .7em 0;
     border-bottom: 1px solid #DDD;
 }
+#header a:link, #header a:hover, #header a:focus, #header a:visited {
+    color: #444;
+}
 #content { 
     padding: 2em 0; 
 }
@@ -25,6 +28,9 @@ html {
     font-weight: bold;
     display: none; 
     float: right; 
+}
+#dayNight a:hover {
+    text-decoration: none;
 }
 #metadata {
     margin: .75em 0;
@@ -45,7 +51,6 @@ html {
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 /* heading links */
-#header a:link, #header a:hover, #header a:focus, #header a:visited,
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
