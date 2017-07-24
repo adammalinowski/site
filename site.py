@@ -6,15 +6,13 @@ import sys
 import traceback
 from functools import partial
 
-from boto import s3
-from boto.s3.connection import OrdinaryCallingFormat
-
 # package stuff
-import conf
 import assets
+import conf
 import html
 import markup
 import metadata
+import s3
 
 # package utils
 import funcutils as fu
@@ -71,7 +69,8 @@ def make_page(opts, post_data_to_html_page, filename):
         'toc': toc_html,
         'footer': True,
     }
-    post_html = post_data_to_html_page(post_data)
+    content = html.data_to_html_post(post_data)
+    post_html = post_data_to_html_page(title, content)
     fu.str_to_file(output_dir + post_output_filename, post_html)
     fu.str_to_file(output_dir + source_output_filename, post_str)
     return post_data
@@ -80,37 +79,28 @@ def make_page(opts, post_data_to_html_page, filename):
 def try_make_page(opts, post_data_to_html_page, filename):
     try:
         return make_page(opts, post_data_to_html_page, filename)
-    except(Exception, e):
+    except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print('Make page failed for {0} with {1}'.format(filename, e))
         traceback.print_exc()
         print('\n')
 
 
-def simple_post_data(body_html, title, **kwargs):
-    data = {
-        'title': title,
-        'body_html': body_html,
-        'metadata_html': "",
-        'toc': "",
-        'footer': True,
-        'date': '',
-    }
-    data.update(kwargs)
-    return data
+def all_posts_html(post_datas):
+    """ """
 
-
-def page_list(post_datas):
-    return '\n'.join(
+    entries = [
         markup.link(
             post_data['filename'],
             post_data['title'],
-        )
+        ) +
+        markup.tagify('div', post_data['date'], clss='date')
         for post_data in post_datas
-    )
+    ]
+    return ''.join(markup.tagify('div', e, clss='entry') for e in entries)
 
 
-def make_homepage(output_dir, post_data_to_html_page, post_datas):
+def make_homepage(output_dir, static_filenames, post_datas):
     """ Make the homepage as list of links to other pages """
 
     sorted_post_data = sorted(
@@ -118,61 +108,40 @@ def make_homepage(output_dir, post_data_to_html_page, post_datas):
         reverse=True,
         key=lambda pd: pd['metadata']['date'],
     )
-    category_post_data = fu.seq_to_group_dict(
-        sorted_post_data,
-        lambda pd: pd['metadata']['category'],
-    )
-    homepage_post_str = ''
-    for category in ['posts', 'ideas', 'notes']:
-        post_datas = category_post_data[category]
-        homepage_post_str += (
-            '<h3>' + category.title() + '</h3>' + page_list(post_datas)
-        )
-
-    body_html = fu.pipe(
-        homepage_post_str,
-        [markup.post_to_typed_chunks, markup.typed_chunks_to_html_page],
-    )
-    post_html = post_data_to_html_page(
-        simple_post_data(
-            body_html,
-            '',
-        )
-    )
-    fu.str_to_file(output_dir + 'index.html', post_html)
+    body_html = all_posts_html(sorted_post_data)
+    homepage_html = html.data_to_html_page(static_filenames, 'adammalinowski.co.uk', body_html)
+    fu.str_to_file(output_dir + 'index.html', homepage_html)
 
 
-def make_404(output_dir, post_data_to_html_page):
-    post_data = simple_post_data(
-        'Feel free to have a look around though.',
-        '404 Error - File not found',
-    )
-    post_html = post_data_to_html_page(post_data)
-    fu.str_to_file(output_dir + '404.html', post_html)
+def make_404(output_dir, static_filenames):
+    title = '404 Error - File not found'
+    body_html = html.data_to_html_post({
+        'title': title,
+        'body_html': 'Not to worry, why not <a href="/">have a look around</a>?',
+        'date': '',
+    })
+    page_html = html.data_to_html_page(static_filenames, title, body_html)
+    fu.str_to_file(output_dir + '404.html', page_html)
 
 
 def make_site(opts):
     static_filenames = make_static_assets(opts)
-    template = html.clean_file(opts['template'])
+    post_filenames = get_post_filenames(opts['post_source_dir'])
 
-    # partially apply apart from post data
+    # partially apply apart from post data for some reason
     post_data_to_html_page = partial(
         html.data_to_html_page,
-        *(template, static_filenames)
+        static_filenames
     )
+    make_page_func = make_page if opts['publish'] else try_make_page
+    post_datas = []
+    for filename in post_filenames:
+        post_data = make_page_func(opts, post_data_to_html_page, filename)
+        if post_data is not None:
+            post_datas.append(post_data)
 
-    if opts['publish']:
-        make_page_func = make_page
-    else:
-        make_page_func = try_make_page
-
-    post_filenames = get_post_filenames(opts['post_source_dir'])
-    thing = partial(make_page_func, *(opts, post_data_to_html_page))
-    post_datas = map(thing, post_filenames)
-    post_datas = filter(None, post_datas)  # try_make_page may return None
-
-    make_homepage(opts['out_dir'], post_data_to_html_page, post_datas)
-    make_404(opts['out_dir'], post_data_to_html_page)
+    make_homepage(opts['out_dir'], static_filenames, post_datas)
+    make_404(opts['out_dir'], static_filenames)
 
 
 def make_static_assets(opts):
@@ -278,60 +247,6 @@ def get_args():
     return vars(parser.parse_args())
 
 
-def get_s3_bucket():
-    conn = s3.connect_to_region(
-        'eu-west-2',
-        aws_access_key_id=os.environ['S3_ACCESS_KEY_ID'],
-        aws_secret_access_key=os.environ['S3_SECRET_ACCESS_KEY'],
-        is_secure=True,
-    )
-    return conn.get_bucket('adammalinowski')
-
-
-def extension(filename):
-    splitfilename = filename.split('.')
-    return splitfilename[-1] if len(splitfilename) > 1 else 'html'
-
-
-def filename_to_mimetype(filename):
-    extension_to_mimetype = {
-        'txt': 'text/plain',
-        'html': 'text/html',
-        'css': 'text/css',
-        'js': 'text/javascript',
-    }
-    return extension_to_mimetype[extension(filename)]
-
-
-def filename_to_headers(filename):
-    no_cache = {'Cache-Control': 'private, max-age=0'}
-    long_cache = {'Cache-Control': 'public, max-age=31449600'}
-    extension_to_headers = {
-        'txt': no_cache,
-        'html': no_cache,
-        'css': long_cache,
-        'js': long_cache,
-    }
-    return extension_to_headers[extension(filename)]
-
-
-def upload(out_dir):
-    bucket = get_s3_bucket()
-    for file_name in os.listdir(out_dir):
-        file_path = out_dir + file_name
-        content_type = filename_to_mimetype(file_name)
-        key = s3.key.Key(bucket)
-        key.key = file_name
-        key.content_type = content_type
-        headers = filename_to_headers(file_name)
-        print('putting', file_name)
-        key.set_contents_from_filename(
-            file_path,
-            headers=headers,
-        )
-        key.make_public()
-
-
 def get_options():
     args = get_args()
     # configure_logging(args['verbosity'])
@@ -340,7 +255,7 @@ def get_options():
         print(raw_body_to_html(args['test']))
         return
 
-    publish = args['output'] in ['publish', 'upload']  # draft if false
+    publish = args['output'] in ['publish', 'upload']  # otherwise is draft
     out_dir = conf.PUBLISH_OUTPUT_DIR if publish else conf.DRAFT_OUTPUT_DIR
     post_source_dir = conf.POST_INPUT_DIR if publish else conf.DRAFT_INPUT_DIR
     options = {
@@ -350,21 +265,28 @@ def get_options():
         'js_source_dir': conf.JS_INPUT_DIR,
         'post_source_dir': post_source_dir,
         'out_dir': out_dir,
-        'template': conf.PROJECT_ROOT + '/templates/base.html',
         'upload': args['output'] == 'upload',
     }
     return options
+
+
+def empty_dir(directory):
+    """ Delete all files in directory """
+
+    for name in os.listdir(directory):
+        os.remove(directory + name)
 
 
 def main():
     """ Use command line args and config to do the business """
 
     options = get_options()
+    empty_dir(options['out_dir'])
     make_site(options)
     print('output done ' + datetime.datetime.now().strftime('%H:%M:%S'))
 
     if options['upload']:
-        upload(options['out_dir'])
+        s3.upload(options['out_dir'])
         print('upload done')
 
 

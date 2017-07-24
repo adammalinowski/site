@@ -30,17 +30,31 @@ def clean_file(path):
     return composed(path)
 
 
-def data_to_html_page(template, static_filenames, post_data):
+def data_to_html_post(post_data):
+    content = """
+    <h1>{page_title}</h1>
+    <div id="metadata">{date}</div>
+    <div id="body">{body}</div>
+    """.format(
+        page_title=post_data['title'],
+        body=post_data['body_html'],
+        date=post_data['date'],
+    )
+    return content
+
+
+def data_to_html_page(static_filenames, page_title, content):
     """ Put it all together into HTML page """
 
+    import conf
+    template = clean_file(conf.PROJECT_ROOT + '/templates/base.html')
     return template.format(
         css_filename=static_filenames['primary_css'],
         dark_css_filename=static_filenames['dark_css'],
         javascript_filename=static_filenames['js'],
         site_name='adammalinowski.co.uk',
-        page_title=post_data['title'],
-        body=post_data['body_html'],
-        date=post_data['date'],
+        page_title=page_title,
+        content=content,
     )
 
 

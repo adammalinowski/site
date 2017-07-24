@@ -1,11 +1,12 @@
-Todo
-
+https://hstspreload.org/
+gzip?
+chrome zoom triggers night?
+switch to dashes and stop adding html extension
 
 write some posts!!!
-- contact
+- about
 - disclaimer
 - some other stuff
-
 
 general:
 - how to handle versioning, date updating (when changing a file).
@@ -24,13 +25,6 @@ general:
 - internal anchors for paragraphs?
 - rss/atom
 
-
-style:
-- make footer links not links when you are on that page. sort out darkstyle :visited issue
-- improve style (links, footer)
-- figure out ff browser width confusion (1660???)
-
-
 markup:
 - allow empty lines in code blocks!!!!
 - lists
@@ -47,14 +41,3 @@ markup:
 - quotes (inner & block)
 - optional line breaking?
 
-
-general thinking:
-- notes somehow distinct? is anything not notes?
-- blog posts seem different to notes. you want them ordered by date created.
-  for notes date created is not that important, since the idea is for the file
-  to be somewhat timeless and continually updated
-
-
-misc
-- favicon?
-- email

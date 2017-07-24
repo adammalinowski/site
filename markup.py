@@ -267,6 +267,20 @@ def typed_chunks_to_toc_list(typed_chunks):
     return [(t, c[0]) for t, c in typed_chunks if t in ['h2', 'h3']]
 
 
+def tagify(tag, value, **kwargs):
+    attrs = ''
+    if kwargs:
+        if 'clss' in kwargs:
+            kwargs['class'] = kwargs.pop('clss')
+        attr_kvs = ['{}="{}"'.format(k, v) for k, v in kwargs.items()]
+        attrs = ' ' + ' '.join(attr_kvs)
+    return '<{tag}{attrs}>{val}</{tag}>'.format(
+        tag=tag,
+        val=value,
+        attrs=attrs,
+    )
+
+
 def link(href, text):
     return '<a href="{0}">{1}</a>'.format(href, text)
 

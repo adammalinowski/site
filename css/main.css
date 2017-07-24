@@ -4,9 +4,9 @@ html, button, input, select, textarea {
 }
 html {
     background-color: #FCFCFC;
-    color: #111;
-    line-height: 1.44;
-    font-size: 17px;
+    color: #0C0C0C;
+    line-height: 1.45;
+    font-size: 16px;
 }
 #centercol {  /* holds everything */
     padding: 0 1em;
@@ -15,14 +15,14 @@ html {
 }
 #header {
     font-size: .85em;
-    padding: .7em 0;
+    padding: .85em 0 .7em 0;
     border-bottom: 1px solid #DDD;
 }
 #header a:link, #header a:hover, #header a:focus, #header a:visited {
     color: #444;
 }
 #content { 
-    padding: 2em 0; 
+    padding: 1.7em 0; 
 }
 #dayNight {
     font-weight: bold;
@@ -33,7 +33,7 @@ html {
     text-decoration: none;
 }
 #metadata {
-    margin: .75em 0;
+    margin: .6em 0;
     color: #888;
     font-size: .82em;
 }
@@ -42,28 +42,46 @@ html {
 }
 #footer {    
     border-top: 1px solid #DDD;
-    color: #666;
+    color: #555;
     font-size: .9em;
     padding: 2em 0;
     margin-bottom: 5em;
 }
+.entry {
+    margin-bottom: 1em;
+    font-size: 1.1em;
+}
+.date {
+    font-size: .7em;
+    color: #777;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #222;
+    margin: 1.5em 0 0 0;
+    padding: 0;
+    line-height: 1.25;
+    font-weight: normal;
+    font-weight: 500;
+}
+h1 { font-size: 1.8em; margin: 0; }
+h2 { font-size: 1.38em; }
+h3 { font-size: 1.18em; }
 
-a { text-decoration: none; }
+a { text-decoration: none; color: #004ad9; }
 a:hover { text-decoration: underline; }
+a:visited { color: #0e21b9; }
 /* heading links */
 h1 a:link, h1 a:hover, h1 a:focus, h1 a:visited,
 h2 a:link, h2 a:hover, h2 a:focus, h2 a:visited,
 h3 a:link, h3 a:hover, h3 a:focus, h3 a:visited,
-h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited
-    {
-        color: #444;
-        text-decoration: none;
-    }
-h1 { font-size: 2em; margin: 0; font-weight: normal; line-height: 1.25; }  /* page title */
-ul { margin: 0; padding: 0 0 0 1em; }
+h4 a:link, h4 a:hover, h4 a:focus, h4 a:visited {
+    color: #111;
+    text-decoration: none;
+}
+ul, ol, p, pre { margin: .55em 0 .8em 0; }
+ul { padding: 0 0 0 1em; }
 ul li { list-style-type: square; }
-ol { margin: 0; padding: 0 0 0 1.4em; }
+ol { padding: 0 0 0 1.4em; }
 li { margin: 0; padding: 0; }
 hr { margin: 2em auto; width: 66%; }
-p, pre { margin: .8em 0; }
 code,kbd,pre,samp { background-color: #EEE; font-size: .95em; padding: .1em .2em ; }
