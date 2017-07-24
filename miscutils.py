@@ -1,5 +1,6 @@
-import string
 import logging
+import os
+import string
 from functools import wraps
 
 
@@ -46,6 +47,8 @@ def num_to_base36(anint):
 
 
 def nice_date(dt):
+    """ Make a nice presentable string from a datetime object """
+
     def suffix(day):
         if 4 <= day <= 20 or 24 <= day <= 30:
             return "th"
@@ -55,3 +58,10 @@ def nice_date(dt):
     if niceish.startswith('0'):
         return niceish[1:]
     return niceish
+
+
+def empty_dir(directory):
+    """ Delete all files in directory """
+
+    for name in os.listdir(directory):
+        os.remove(directory + name)
