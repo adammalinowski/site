@@ -1,14 +1,6 @@
 // onload?
 // preventdefault?
 (function() {
-    // add dark stylesheet with js on init
-    var nightSheet = document.createElement('link')
-    nightSheet.type = 'text/css'
-    nightSheet.rel = 'stylesheet'
-    nightSheet.href = document.getElementById("darkcss").content;
-    document.head.appendChild(nightSheet)
-    nightSheet.disabled = true  // has to be done after inserting the element
-
     var addEvent = function(elem, name, func) {
         elem.addEventListener ? elem.addEventListener(name, func) : elem.attachEvent(name, func);
     }
@@ -30,7 +22,7 @@
     var nightOn = document.getElementById("nightOn");
 
     var night = function(e) {
-        nightSheet.disabled = false;        
+        document.documentElement.className = "dark";
         show(showDay);
         hide(showNight);
         localStorage.setItem('dayOrNight', 'night');
@@ -38,7 +30,7 @@
     };
 
     var day = function(e) {
-        nightSheet.disabled = true;        
+        document.documentElement.className = "";
         show(showNight);
         hide(showDay);
         localStorage.setItem('dayOrNight', 'day');

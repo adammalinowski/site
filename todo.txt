@@ -1,6 +1,5 @@
 https://hstspreload.org/
 gzip?
-chrome zoom triggers night?
 switch to dashes and stop adding html extension
 
 write some posts!!!
@@ -18,7 +17,7 @@ general:
 - refactor everything
 - fix verbosity argparser issue
 - command line test, more options
-- xotd (or not?!)
+- xotd (or not)
 - testing!
 - warnings
 - description field
@@ -41,3 +40,9 @@ markup:
 - quotes (inner & block)
 - optional line breaking?
 
+
+write up how to use
+- tl;dr
+  - create new post in to publish dir ending in .txt
+  - run `site.py output upload`
+  - use `watchmedo shell-command --command "python3.6 ~/projects/site/site.py output draft" --recursive ~/posts/drafts` while editing

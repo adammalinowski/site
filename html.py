@@ -50,7 +50,6 @@ def data_to_html_page(static_filenames, page_title, content):
     template = clean_file(conf.PROJECT_ROOT + '/templates/base.html')
     return template.format(
         css_filename=static_filenames['primary_css'],
-        dark_css_filename=static_filenames['dark_css'],
         javascript_filename=static_filenames['js'],
         site_name='adammalinowski.co.uk',
         page_title=page_title,

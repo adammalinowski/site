@@ -14,7 +14,7 @@ def get_path_files_with_ext(extension, directory):
 
     return [
         directory + file_name for file_name in os.listdir(directory)
-        if file_name.endswith(extension) and file_name != 'dark.css'
+        if file_name.endswith(extension)
     ]
 
 
@@ -55,38 +55,26 @@ def get_cachebusting_name(file_str):
 def make_static_assets(opts):
     """ Make cachebusted css & js files, return dict of filenames """
 
-    css_filename, dark_css_filename = do_css(
-        opts['css_source_dir'],
-        opts['out_dir'],
-    )
-    js_filename = do_js(
-        opts['js_source_dir'],
-        opts['out_dir'],
-    )
+    css_filename = do_css(opts['css_source_dir'], opts['out_dir'])
+    js_filename = do_js(opts['js_source_dir'], opts['out_dir'])
     return {
         'primary_css': css_filename,
-        'dark_css': dark_css_filename,
         'js': js_filename
     }
 
 
 def do_css(css_input_dir, css_output_dir):
-    """ Take input css & dark css, combine, cachebust, replace """
+    """ Take input css, combine, cachebust, replace """
 
     # primary css
     css_str = combine_css(css_input_dir)
     css_name = get_cachebusting_name(css_str) + '.css'
 
-    # dark css
-    dark_css_str = fu.file_to_str(css_input_dir + 'dark.css')
-    dark_css_name = get_cachebusting_name(dark_css_str) + '.css'
-
     # remove and write
     remove_extention('.css', css_output_dir)
     fu.str_to_file(css_output_dir + css_name, css_str)
-    fu.str_to_file(css_output_dir + dark_css_name, dark_css_str)
 
-    return css_name, dark_css_name
+    return css_name
 
 
 def do_js(js_input_dir, js_output_dir):

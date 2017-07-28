@@ -72,7 +72,7 @@ def chunk_to_typed_chunk(chunk):
     examples:
     - ["Hi.", "What is up?"] -> ('p', ["Hi.", "What is up?"])
     - ["---"] -> ('hr', [])
-    - ["``10 PRINT 'bumface'", "20 GOTO 10``"]
+    - ["`10 PRINT 'bumface'", "20 GOTO 10`"]
       -> ('pre', ["10 PRINT 'bumface'", "20 GOTO 10"])
 
     """
@@ -87,7 +87,7 @@ def chunk_to_typed_chunk(chunk):
         else:
             return ('h3', chunk[:-1])
 
-    if schunk[0].startswith('``') and schunk[-1].endswith('``'):
+    if schunk[0].startswith('`') and schunk[-1].endswith('`'):
         chunk[0] = chunk[0][2:]  # remove markup
         chunk[-1] = chunk[-1][:-2]  # remove markup
         return ('pre', chunk)
@@ -210,13 +210,13 @@ def inline_markup_to_html(astr):
 
     markup_to_elem = [(r'\*', '<b>', '</b>'),
                       (r'\/', '<i>', '</i>'),
-                      (r'``', '<code>', '</code>')]
+                      (r'`', '<code>', '</code>')]
 
     def replace(matched):
         """ Take matched, add opening & closing tags, cgi escape if code """
 
         matched_str = matched.groups()[0]
-        if match == '``':
+        if match == '`':
             matched_str = cgi.escape(matched_str)
         return opener + matched_str + closer
 
